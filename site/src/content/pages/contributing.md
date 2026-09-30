@@ -405,14 +405,17 @@ needed. Ask to be added to
 [`config/maintainers.yml`](https://github.com/flatpark/flatpark/blob/main/config/maintainers.yml);
 after that, comment `/merge` on a PR and a bot merges it once these hold:
 
-- **Every change is inside your own app's `registry/<id>/`**, and the app is
-  already listed (adding or de-listing an app still goes through review).
+- **Every change is a plain file at the top of your own app's
+  `registry/<id>/`**, and the app is already listed. Subdirectories, dotfiles
+  (such as `.gitattributes`), symlinks and submodules go through review, as
+  does adding or de-listing an app.
 - **The build recipe is untouched** — in the manifest, only `finish-args` and
   the `MANAGED EXTRA-DATA` block may change, and that block may only hold
   `extra-data` sources. Wrapper, `apply_extra.sh`, desktop file, metainfo,
   icons and screenshots are all yours to edit.
-- **The update resolver is untouched** — `resolve-update.sh` and the
-  `update:` section of `flatpark.yml` run in CI with a write token.
+- **`flatpark.yml` and `resolve-update.sh` are untouched** — they drive the
+  update resolver (which runs in CI with a write token), the build and the
+  catalog page, so they stay with a maintainer.
 - **pr-checks passed on the exact commit** you asked to merge. A push after
   your comment is not included; comment `/merge` again.
 
