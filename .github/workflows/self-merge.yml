@@ -9,10 +9,11 @@
 # maintainer list comes from main, never from the PR.
 #
 # What a self-merge may change is decided by scripts/self-merge-check.mjs (see
-# its header): the app's own files, but not its update resolver, its build
-# steps, or its existence. On top of that, pr-checks must be green on the exact
-# head commit, and the merge is pinned to that commit (--match-head-commit), so
-# a push after the comment cannot ride along.
+# its header): plain files at the top of the app's own directory, but not
+# flatpark.yml, its update resolver, its build steps, or its existence. On top
+# of that, the pr-checks.yml run on the exact head commit must be green, the
+# merge is pinned to that commit (--match-head-commit) so a push after the
+# comment cannot ride along, and main must not have moved since the decision.
 #
 # Kill switch: set the repo variable SELF_MERGE=false.
 name: self-merge
