@@ -30,7 +30,7 @@
       <li>Files on a removable drive: <code>flatpak override --user --filesystem=/run/media com.ingetrazo.IngeTrazo</code></li>
       <li>A 3D mouse served by spacenavd: <code>flatpak override --user --filesystem=/run/spnav.sock:ro com.ingetrazo.IngeTrazo</code></li>
       <li>Printing through the system CUPS service: <code>flatpak override --user --socket=cups com.ingetrazo.IngeTrazo</code></li>
-      <li>Starting a Blender installed on the host, for Render with Blender: <code>flatpak override --user --talk-name=org.freedesktop.Flatpak com.ingetrazo.IngeTrazo</code></li>
+      <li>Starting a Blender installed on the host, for Render with Blender: <code>flatpak override --user --talk-name=org.freedesktop.Flatpak --filesystem=~/.cache/IngeTrazo:create com.ingetrazo.IngeTrazo</code> (the render job is written to ~/.cache/IngeTrazo, where the host Blender can read it)</li>
     </ul>
   </description>
   <screenshots>
