@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.ingetrazo.IngeTrazo</id>
+  <launchable type="desktop-id">com.ingetrazo.IngeTrazo.desktop</launchable>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>IngeTrazo</name>
+  <summary>Free 3D modeler for architecture, engineering and BIM</summary>
+  <summary xml:lang="es">Modelador 3D libre para arquitectura, ingeniería y BIM</summary>
+  <developer id="com.ingetrazo">
+    <name>Marco Sumari Tellez</name>
+  </developer>
+  <url type="homepage">https://ingetrazo.com</url>
+  <url type="bugtracker">https://github.com/ingelibre/ingetrazo/issues</url>
+  <url type="vcs-browser">https://github.com/ingelibre/ingetrazo</url>
+  <description>
+    <p>This is a community package of IngeTrazo, maintained independently and unaffiliated with the IngeTrazo project. It repackages the official upstream Linux tarball unmodified — unpacked at install time, not rebuilt — and follows upstream releases automatically.</p>
+    <p>IngeTrazo is a free 3D modeler for drawing as if by hand: push/pull modelling, groups and components, materials, dimensions, layers, scenes and a sheet composer that turns the model into to-scale plan sheets.</p>
+    <ul>
+      <li>Opens .skp files natively (2013–2026) and reads and writes .igz documents.</li>
+      <li>Imports and exports COLLADA, OBJ, STL and glTF/GLB.</li>
+      <li>Tags geometry with IFC classes and exports IFC4 for quantity take-off.</li>
+      <li>Brings in base-map tiles, 3D terrain and survey points.</li>
+      <li>Sheet composer with vector PDF and DXF export.</li>
+    </ul>
+    <p>Permissions: this package grants read-write access to Documents, Downloads and Pictures, because a model keeps textures and linked files by path and they have to stay reachable when the file is reopened. GPU access is required for the viewport. Network access is used for base-map tiles, elevation data and geocoding. Settings stay inside the sandbox.</p>
+    <p>A few optional capabilities are not granted by default; enable the ones you need with "flatpak override":</p>
+    <ul>
+      <li>Projects anywhere under your home folder: <code>flatpak override --user --filesystem=home com.ingetrazo.IngeTrazo</code></li>
+      <li>Files on a removable drive: <code>flatpak override --user --filesystem=/run/media com.ingetrazo.IngeTrazo</code></li>
+      <li>A 3D mouse served by spacenavd: <code>flatpak override --user --filesystem=/run/spnav.sock:ro com.ingetrazo.IngeTrazo</code></li>
+      <li>Printing through the system CUPS service: <code>flatpak override --user --socket=cups com.ingetrazo.IngeTrazo</code></li>
+      <li>Starting a Blender installed on the host, for Render with Blender: <code>flatpak override --user --talk-name=org.freedesktop.Flatpak com.ingetrazo.IngeTrazo</code></li>
+    </ul>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://ingetrazo.com/images/screenshots/principal.jpeg</image>
+      <caption>Modelling a plaza: push/pull, groups, materials and shadows</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://ingetrazo.com/images/screenshots/laminas.jpeg</image>
+      <caption>The sheet composer: to-scale plans with dimensions and a title block</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://ingetrazo.com/images/screenshots/terreno.jpeg</image>
+      <caption>Real terrain: base-map tiles, 3D elevation and survey data</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://ingetrazo.com/images/screenshots/bim.jpeg</image>
+      <caption>BIM tags on the geometry, exported to IFC4</caption>
+    </screenshot>
+  </screenshots>
+  <content_rating type="oars-1.1"/>
+  <categories>
+    <category>Graphics</category>
+    <category>3DGraphics</category>
+    <category>Engineering</category>
+  </categories>
+  <keywords>
+    <keyword>3D</keyword>
+    <keyword>CAD</keyword>
+    <keyword>BIM</keyword>
+    <keyword>architecture</keyword>
+    <keyword>engineering</keyword>
+    <keyword>IFC</keyword>
+  </keywords>
+  <releases>
+    <release version="0.5.7" date="2026-09-30"/>
+  </releases>
+</component>

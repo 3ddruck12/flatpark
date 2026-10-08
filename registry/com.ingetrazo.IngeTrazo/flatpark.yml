@@ -1,0 +1,24 @@
+id: com.ingetrazo.IngeTrazo
+name: IngeTrazo
+summary: Free 3D modeler for architecture, engineering and BIM
+website: https://ingetrazo.com
+source_url: https://github.com/ingelibre/ingetrazo
+build:
+  manifest: com.ingetrazo.IngeTrazo.yml
+  branch: stable
+  mode: extra-data
+catalog:
+  category: Graphics
+  upstream_approved: false
+  tags:
+    - 3D
+    - CAD
+    - Architecture
+    - BIM
+    - Engineering
+update:
+  command: ./resolve-update.sh
+policy:
+  proprietary: false
+  extra_data_first: true
+  dangerous_permissions: []

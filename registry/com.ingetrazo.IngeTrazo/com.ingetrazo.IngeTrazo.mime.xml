@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x-ingetrazo">
+    <comment>IngeTrazo document</comment>
+    <comment xml:lang="es">Documento de IngeTrazo</comment>
+    <glob pattern="*.igz"/>
+  </mime-type>
+  <mime-type type="application/vnd.sketchup.skp">
+    <comment>SKP model</comment>
+    <comment xml:lang="es">Modelo SKP</comment>
+    <glob pattern="*.skp"/>
+  </mime-type>
+</mime-info>
