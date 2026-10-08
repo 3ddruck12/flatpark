@@ -1,0 +1,23 @@
+id: org.ingecad.IngeCAD
+name: IngeCAD
+summary: Free 2D CAD for DWG and DXF drawings
+website: https://ingecad.org
+source_url: https://github.com/ingelibre/ingecad
+build:
+  manifest: org.ingecad.IngeCAD.yml
+  branch: stable
+  mode: extra-data
+catalog:
+  category: Graphics
+  upstream_approved: false
+  tags:
+    - CAD
+    - DWG
+    - DXF
+    - Engineering
+update:
+  command: ./resolve-update.sh
+policy:
+  proprietary: false
+  extra_data_first: true
+  dangerous_permissions: []

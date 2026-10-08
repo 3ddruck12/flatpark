@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="image/vnd.dwg">
+    <comment>AutoCAD drawing</comment>
+    <comment xml:lang="es">Dibujo de AutoCAD (DWG)</comment>
+    <glob pattern="*.dwg"/>
+  </mime-type>
+  <mime-type type="image/vnd.dxf">
+    <comment>DXF drawing</comment>
+    <comment xml:lang="es">Dibujo DXF</comment>
+    <glob pattern="*.dxf"/>
+  </mime-type>
+</mime-info>

@@ -1,0 +1,69 @@
+id: org.ingecad.IngeCAD
+# The app id matches upstream's own Flatpak (org.ingecad.IngeCAD), so this
+# package and the one they publish are the same application. The payload is
+# their official Linux tarball, a self-contained PyInstaller tree (Python,
+# PySide6 / Qt 6, and LibreDWG). Nothing Qt or Python comes from the runtime.
+# ldd inside org.freedesktop.Platform//26.08 reports no missing libraries;
+# libGL and libEGL are not shipped in the tarball, so the runtime's copies
+# are the ones that load.
+runtime: org.freedesktop.Platform
+runtime-version: "26.08"
+sdk: org.freedesktop.Sdk
+command: ingecad
+separate-locales: false
+build-options:
+  no-debuginfo: true
+finish-args:
+  - --share=ipc
+  # The tarball ships both the Qt 6 Wayland platform plugin and xcb. When
+  # Wayland EGL cannot create the desktop-GL context the canvas asks for,
+  # the app restarts itself under xcb and needs a real DISPLAY.
+  # --socket=fallback-x11 withholds X11 while a compositor is present, so
+  # this is a plain --socket=x11 next to Wayland.
+  - --socket=wayland
+  - --socket=x11
+  # The OpenGL canvas is the application.
+  - --device=dri
+  # The Terrain plugin fetches elevation tiles when asked. Drafting itself
+  # is local; withholding network only disables that.
+  - --share=network
+  # A drawing references xrefs, images and plot styles by path, and
+  # reopening it needs those paths to still be reachable. These are the
+  # standard document locations. Drawings kept elsewhere are an opt-in
+  # override in the metainfo. Not --filesystem=home, so settings stay under
+  # ~/.var/app/org.ingecad.IngeCAD.
+  - --filesystem=xdg-documents
+  - --filesystem=xdg-download
+  - --filesystem=xdg-pictures
+modules:
+  - name: ingecad
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 apply_extra.sh /app/bin/apply_extra
+      - install -Dm755 ingecad-wrapper /app/bin/ingecad
+      - install -Dm644 org.ingecad.IngeCAD.desktop /app/share/applications/org.ingecad.IngeCAD.desktop
+      - install -Dm644 org.ingecad.IngeCAD.metainfo.xml /app/share/metainfo/org.ingecad.IngeCAD.metainfo.xml
+      - install -Dm644 org.ingecad.IngeCAD.mime.xml /app/share/mime/packages/org.ingecad.IngeCAD.xml
+      - install -Dm644 org.ingecad.IngeCAD.png /app/share/icons/hicolor/256x256/apps/org.ingecad.IngeCAD.png
+    sources:
+      # BEGIN MANAGED EXTRA-DATA
+      - type: extra-data
+        filename: ingecad.tar.gz
+        only-arches:
+          - x86_64
+        url: https://github.com/ingelibre/ingecad/releases/download/v0.6.4/IngeCAD-0.6.4-linux-x86_64.tar.gz
+        sha256: aaa03eea683fbeabb5f16040265fa0cb3160f026704463b732e2ae5a00c65dcb
+        size: 128683398
+      # END MANAGED EXTRA-DATA
+      - type: file
+        path: apply_extra.sh
+      - type: file
+        path: ingecad-wrapper
+      - type: file
+        path: org.ingecad.IngeCAD.desktop
+      - type: file
+        path: org.ingecad.IngeCAD.metainfo.xml
+      - type: file
+        path: org.ingecad.IngeCAD.mime.xml
+      - type: file
+        path: org.ingecad.IngeCAD.png

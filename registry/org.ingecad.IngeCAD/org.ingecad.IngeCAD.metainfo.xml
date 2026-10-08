@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.ingecad.IngeCAD</id>
+  <launchable type="desktop-id">org.ingecad.IngeCAD.desktop</launchable>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>IngeCAD</name>
+  <summary>Free 2D CAD for DWG and DXF drawings</summary>
+  <summary xml:lang="es">CAD 2D libre para planos DWG y DXF</summary>
+  <developer id="org.ingecad">
+    <name>Marco Sumari Tellez</name>
+  </developer>
+  <url type="homepage">https://ingecad.org</url>
+  <url type="bugtracker">https://github.com/ingelibre/ingecad/issues</url>
+  <url type="vcs-browser">https://github.com/ingelibre/ingecad</url>
+  <description>
+    <p>This is a community package of IngeCAD, maintained independently and unaffiliated with the IngeCAD project. It repackages the official upstream Linux tarball unmodified — unpacked at install time, not rebuilt — and follows upstream releases automatically.</p>
+    <p>IngeCAD is a free 2D CAD for Linux in the spirit of classic AutoCAD: the same keyboard commands, layers, blocks, hatches, dimensions, layouts and DWG/DXF round-trip through the bundled LibreDWG converters.</p>
+    <ul>
+      <li>Opens and saves DWG and DXF drawings.</li>
+      <li>Command line with the classic aliases, layers, blocks and dimensions.</li>
+      <li>Paper space, viewports and scaled plotting.</li>
+      <li>Survey and terrain plugins, including elevation from a public DEM when you ask for it.</li>
+    </ul>
+    <p>Permissions: this package grants read-write access to Documents, Downloads and Pictures, because a drawing keeps external references and images by path and they have to stay reachable when the file is reopened. GPU access is required for the canvas. Network access is used by the Terrain plugin to fetch elevation tiles. Settings stay inside the sandbox.</p>
+    <p>A few optional capabilities are not granted by default; enable the ones you need with "flatpak override":</p>
+    <ul>
+      <li>Drawings anywhere under your home folder: <code>flatpak override --user --filesystem=home org.ingecad.IngeCAD</code></li>
+      <li>Files on a removable drive: <code>flatpak override --user --filesystem=/run/media org.ingecad.IngeCAD</code></li>
+      <li>Plot style tables you already keep in your config folder: <code>flatpak override --user --filesystem=~/.config/IngeCAD:ro org.ingecad.IngeCAD</code></li>
+      <li>A shared classroom setup in /etc/ingecad: <code>flatpak override --user --filesystem=host-etc:ro org.ingecad.IngeCAD</code></li>
+      <li>Printing through the system CUPS service: <code>flatpak override --user --socket=cups org.ingecad.IngeCAD</code></li>
+    </ul>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://ingecad.org/images/screenshots/principal.jpeg</image>
+      <caption>A truss detail with the layers manager and classic toolbars</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://ingecad.org/images/screenshots/dwg-colega.jpeg</image>
+      <caption>A colleague's DWG opened as sent</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://ingecad.org/images/screenshots/presentacion.jpeg</image>
+      <caption>A layout: the sheet with the plan inside a viewport</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://ingecad.org/images/screenshots/terreno.jpeg</image>
+      <caption>Terrain: a satellite image under a survey</caption>
+    </screenshot>
+  </screenshots>
+  <content_rating type="oars-1.1"/>
+  <categories>
+    <category>Graphics</category>
+    <category>2DGraphics</category>
+    <category>Engineering</category>
+  </categories>
+  <keywords>
+    <keyword>CAD</keyword>
+    <keyword>DWG</keyword>
+    <keyword>DXF</keyword>
+    <keyword>drafting</keyword>
+    <keyword>engineering</keyword>
+  </keywords>
+  <releases>
+    <release version="0.6.4" date="2026-09-27"/>
+  </releases>
+</component>

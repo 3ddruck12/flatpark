@@ -1,0 +1,28 @@
+#!/bin/sh
+set -eu
+
+# apply_extra stages the official tarball at /app/extra/ingecad. The bundled
+# desktop file names the launcher (Exec=ingecad today). Read that name out
+# of the artifact so a later release can rename the binary without a
+# manifest edit. Exec the binary itself: the PyInstaller bootloader finds
+# _internal beside it, and the in-app OpenGL fallback re-execs
+# sys.executable, which for a frozen build is this same file.
+#
+# Do not pin QT_QPA_PLATFORM. The bundle ships Wayland and xcb, and the app
+# decides if it needs to restart under xcb. An explicit
+# flatpak override --env=QT_QPA_PLATFORM=… still wins.
+root=/app/extra/ingecad
+desktop="$(find "$root" -maxdepth 1 -name '*.desktop' -print -quit)"
+[ -n "$desktop" ] || { echo "ingecad: no desktop file under $root" >&2; exit 1; }
+exec_line="$(sed -n 's/^Exec=//p' "$desktop" | head -n 1)"
+bin="${exec_line%% *}"
+case "$bin" in
+    /*) launcher="$bin" ;;
+    *) launcher="$root/$bin" ;;
+esac
+[ -n "$bin" ] && [ -x "$launcher" ] || { echo "ingecad: launcher '$exec_line' is not executable" >&2; exit 1; }
+
+# A relative path resolved against the install directory would hand the
+# host file chooser a sandbox-only path. Start in the per-app home instead.
+cd "${HOME:-/}" 2>/dev/null || cd /
+exec "$launcher" "$@"
