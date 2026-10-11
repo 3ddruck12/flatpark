@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>ai.storyteller.solvecraft</id>
+  <id>io.github.bherbruck.SolveCraft</id>
   <name>SolveCraft</name>
   <summary>Parametric 3D CAD in the style of Fusion</summary>
   <metadata_license>CC0-1.0</metadata_license>
@@ -21,12 +21,12 @@
       <li>STEP and IGES import and export; 3MF, STL and OBJ</li>
       <li>Every action is a command, scriptable from a CLI, a JSON control channel and an MCP server</li>
     </ul>
-    <p>The headless command runner and MCP server is included: <code>flatpak run --command=solvecraft-cli ai.storyteller.solvecraft --help</code></p>
+    <p>The headless command runner and MCP server is included: <code>flatpak run --command=solvecraft-cli io.github.bherbruck.SolveCraft --help</code></p>
     <p>Permissions: this package uses the same sandbox as upstream's own Flatpak manifest: display (Wayland, with X11 as a fallback), the GPU device, and the Documents folder. Files anywhere else are opened and saved through the system file chooser. No network access is granted.</p>
     <p>Optional overrides:</p>
     <ul>
-      <li>Let agents on the host reach the <code>--control</code> automation server: <code>flatpak override --user --share=network ai.storyteller.solvecraft</code></li>
-      <li>Open files by path anywhere in your home folder: <code>flatpak override --user --filesystem=home ai.storyteller.solvecraft</code></li>
+      <li>Let agents on the host reach the <code>--control</code> automation server: <code>flatpak override --user --share=network io.github.bherbruck.SolveCraft</code></li>
+      <li>Open files by path anywhere in your home folder: <code>flatpak override --user --filesystem=home io.github.bherbruck.SolveCraft</code></li>
     </ul>
   </description>
   <screenshots>
@@ -35,7 +35,7 @@
       <image>https://raw.githubusercontent.com/bherbruck/solvecraft/main/docs/screenshots/sample-plate.png</image>
     </screenshot>
   </screenshots>
-  <launchable type="desktop-id">ai.storyteller.solvecraft.desktop</launchable>
+  <launchable type="desktop-id">io.github.bherbruck.SolveCraft.desktop</launchable>
   <categories>
     <category>Graphics</category>
     <category>3DGraphics</category>

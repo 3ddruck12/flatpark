@@ -6,10 +6,11 @@ GenericName=3D CAD
 Comment=Parametric 3D CAD: sketch, constrain, extrude, and change a parameter to rebuild
 Exec=solvecraft %f
 TryExec=solvecraft
-Icon=ai.storyteller.solvecraft
+Icon=io.github.bherbruck.SolveCraft
 Terminal=false
 StartupNotify=true
-StartupWMClass=solvecraft
+# Compiled into the 0.2.0 binary; the window class does not follow this package id.
+StartupWMClass=ai.storyteller.solvecraft
 Categories=Graphics;3DGraphics;Engineering;
 Keywords=cad;3d;parametric;sketch;step;stl;modelling;modeling;
 MimeType=application/x-solvecraft;model/step;model/iges;model/stl;model/3mf;

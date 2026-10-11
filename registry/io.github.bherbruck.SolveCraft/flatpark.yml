@@ -1,10 +1,10 @@
-id: ai.storyteller.solvecraft
+id: io.github.bherbruck.SolveCraft
 name: SolveCraft
 summary: Parametric 3D CAD in the style of Fusion
 website: https://bherbruck.github.io/solvecraft/
 source_url: https://github.com/bherbruck/solvecraft
 build:
-  manifest: ai.storyteller.solvecraft.yml
+  manifest: io.github.bherbruck.SolveCraft.yml
   branch: stable
   mode: extra-data
   arches: [x86_64, aarch64]

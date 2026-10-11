@@ -1,9 +1,10 @@
-id: ai.storyteller.solvecraft
-# The app id and finish-args follow upstream's own Flatpak manifest
-# (packaging/linux/flatpak/ in bherbruck/solvecraft), so this package and the
-# single-file bundle upstream builds are the same application. The runtime is
-# 26.08. The binaries need glibc and dlopen libwayland, libX11, xkbcommon and
-# Vulkan from it; they do not ship those libraries themselves.
+id: io.github.bherbruck.SolveCraft
+# App id is the author's GitHub namespace. Upstream's single-file bundle
+# still uses ai.storyteller.solvecraft, copied from the PhotoCraft template,
+# and that string is compiled into the binary as its Wayland app id
+# (StartupWMClass). Finish-args follow packaging/linux/flatpak/ in
+# bherbruck/solvecraft. The runtime is 26.08. The binaries need glibc and
+# dlopen libwayland, libX11, xkbcommon and Vulkan from it.
 runtime: org.freedesktop.Platform
 runtime-version: "26.08"
 sdk: org.freedesktop.Sdk
@@ -35,10 +36,10 @@ modules:
       - install -Dm755 apply_extra.sh /app/bin/apply_extra
       - install -Dm755 solvecraft-wrapper /app/bin/solvecraft
       - install -Dm755 solvecraft-cli-wrapper /app/bin/solvecraft-cli
-      - install -Dm644 ai.storyteller.solvecraft.desktop /app/share/applications/ai.storyteller.solvecraft.desktop
-      - install -Dm644 ai.storyteller.solvecraft.metainfo.xml /app/share/metainfo/ai.storyteller.solvecraft.metainfo.xml
-      - install -Dm644 ai.storyteller.solvecraft.mime.xml /app/share/mime/packages/ai.storyteller.solvecraft.xml
-      - install -Dm644 ai.storyteller.solvecraft.png /app/share/icons/hicolor/512x512/apps/ai.storyteller.solvecraft.png
+      - install -Dm644 io.github.bherbruck.SolveCraft.desktop /app/share/applications/io.github.bherbruck.SolveCraft.desktop
+      - install -Dm644 io.github.bherbruck.SolveCraft.metainfo.xml /app/share/metainfo/io.github.bherbruck.SolveCraft.metainfo.xml
+      - install -Dm644 io.github.bherbruck.SolveCraft.mime.xml /app/share/mime/packages/io.github.bherbruck.SolveCraft.xml
+      - install -Dm644 io.github.bherbruck.SolveCraft.png /app/share/icons/hicolor/512x512/apps/io.github.bherbruck.SolveCraft.png
     sources:
       # BEGIN MANAGED EXTRA-DATA
       - type: extra-data
@@ -63,10 +64,10 @@ modules:
       - type: file
         path: solvecraft-cli-wrapper
       - type: file
-        path: ai.storyteller.solvecraft.desktop
+        path: io.github.bherbruck.SolveCraft.desktop
       - type: file
-        path: ai.storyteller.solvecraft.metainfo.xml
+        path: io.github.bherbruck.SolveCraft.metainfo.xml
       - type: file
-        path: ai.storyteller.solvecraft.mime.xml
+        path: io.github.bherbruck.SolveCraft.mime.xml
       - type: file
-        path: ai.storyteller.solvecraft.png
+        path: io.github.bherbruck.SolveCraft.png
