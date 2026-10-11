@@ -1,0 +1,72 @@
+id: ai.storyteller.solvecraft
+# The app id and finish-args follow upstream's own Flatpak manifest
+# (packaging/linux/flatpak/ in bherbruck/solvecraft), so this package and the
+# single-file bundle upstream builds are the same application. The runtime is
+# 26.08. The binaries need glibc and dlopen libwayland, libX11, xkbcommon and
+# Vulkan from it; they do not ship those libraries themselves.
+runtime: org.freedesktop.Platform
+runtime-version: "26.08"
+sdk: org.freedesktop.Sdk
+command: solvecraft
+separate-locales: false
+build-options:
+  no-debuginfo: true
+finish-args:
+  # Native Rust/egui app on winit. Wayland first; X11 only when no compositor
+  # is running.
+  - --socket=wayland
+  - --socket=fallback-x11
+  # X11 shared memory (MIT-SHM) for the X11 fallback.
+  - --share=ipc
+  # wgpu viewport (Vulkan, or GL as a fallback).
+  - --device=dri
+  # Open/Save go through the file-chooser portal. Documents is granted so a
+  # design passed by path keeps working.
+  - --filesystem=xdg-documents
+  # Deliberately not granted:
+  #   --share=network          -> the optional --control server listens on
+  #                               127.0.0.1 inside the sandbox; the metainfo
+  #                               documents the override that exposes it
+  #   --filesystem=home / host -> everything else goes through the portal
+modules:
+  - name: solvecraft
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 apply_extra.sh /app/bin/apply_extra
+      - install -Dm755 solvecraft-wrapper /app/bin/solvecraft
+      - install -Dm755 solvecraft-cli-wrapper /app/bin/solvecraft-cli
+      - install -Dm644 ai.storyteller.solvecraft.desktop /app/share/applications/ai.storyteller.solvecraft.desktop
+      - install -Dm644 ai.storyteller.solvecraft.metainfo.xml /app/share/metainfo/ai.storyteller.solvecraft.metainfo.xml
+      - install -Dm644 ai.storyteller.solvecraft.mime.xml /app/share/mime/packages/ai.storyteller.solvecraft.xml
+      - install -Dm644 ai.storyteller.solvecraft.png /app/share/icons/hicolor/512x512/apps/ai.storyteller.solvecraft.png
+    sources:
+      # BEGIN MANAGED EXTRA-DATA
+      - type: extra-data
+        filename: solvecraft.tar.gz
+        only-arches:
+          - x86_64
+        url: https://github.com/bherbruck/solvecraft/releases/download/v0.2.0/solvecraft-0.2.0-linux-x86_64.tar.gz
+        sha256: 154594521be728ded23e00d253f6013afecfc71863684b5160e5cdc9946d8b6b
+        size: 26289959
+      - type: extra-data
+        filename: solvecraft.tar.gz
+        only-arches:
+          - aarch64
+        url: https://github.com/bherbruck/solvecraft/releases/download/v0.2.0/solvecraft-0.2.0-linux-aarch64.tar.gz
+        sha256: d7d7bfebfb9c729fce5ee1e29e917a3f76071ad7e731a526d5589cadc718ee47
+        size: 24141303
+      # END MANAGED EXTRA-DATA
+      - type: file
+        path: apply_extra.sh
+      - type: file
+        path: solvecraft-wrapper
+      - type: file
+        path: solvecraft-cli-wrapper
+      - type: file
+        path: ai.storyteller.solvecraft.desktop
+      - type: file
+        path: ai.storyteller.solvecraft.metainfo.xml
+      - type: file
+        path: ai.storyteller.solvecraft.mime.xml
+      - type: file
+        path: ai.storyteller.solvecraft.png
