@@ -1,0 +1,73 @@
+id: io.github.bherbruck.SolidCraft
+# App id is the author's GitHub namespace. Upstream's own Flatpak (bundle and repo)
+# still uses ai.storyteller.solvecraft, copied from the PhotoCraft template,
+# and that string is compiled into the binary as its Wayland app id
+# (StartupWMClass). Finish-args follow packaging/linux/flatpak/ in
+# bherbruck/solidcraft. The runtime is 26.08. The binaries need glibc and
+# dlopen libwayland, libX11, xkbcommon and Vulkan from it.
+runtime: org.freedesktop.Platform
+runtime-version: "26.08"
+sdk: org.freedesktop.Sdk
+command: solvecraft
+separate-locales: false
+build-options:
+  no-debuginfo: true
+finish-args:
+  # Native Rust/egui app on winit. Wayland first; X11 only when no compositor
+  # is running.
+  - --socket=wayland
+  - --socket=fallback-x11
+  # X11 shared memory (MIT-SHM) for the X11 fallback.
+  - --share=ipc
+  # wgpu viewport (Vulkan, or GL as a fallback).
+  - --device=dri
+  # Open/Save go through the file-chooser portal. Documents is granted so a
+  # design passed by path keeps working.
+  - --filesystem=xdg-documents
+  # Deliberately not granted:
+  #   --share=network          -> the optional --control server listens on
+  #                               127.0.0.1 inside the sandbox; the metainfo
+  #                               documents the override that exposes it
+  #   --filesystem=home / host -> everything else goes through the portal
+modules:
+  - name: solvecraft
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 apply_extra.sh /app/bin/apply_extra
+      - install -Dm755 solvecraft-wrapper /app/bin/solvecraft
+      - install -Dm755 solvecraft-cli-wrapper /app/bin/solvecraft-cli
+      - install -Dm644 io.github.bherbruck.SolidCraft.desktop /app/share/applications/io.github.bherbruck.SolidCraft.desktop
+      - install -Dm644 io.github.bherbruck.SolidCraft.metainfo.xml /app/share/metainfo/io.github.bherbruck.SolidCraft.metainfo.xml
+      - install -Dm644 io.github.bherbruck.SolidCraft.mime.xml /app/share/mime/packages/io.github.bherbruck.SolidCraft.xml
+      - install -Dm644 io.github.bherbruck.SolidCraft.png /app/share/icons/hicolor/512x512/apps/io.github.bherbruck.SolidCraft.png
+    sources:
+      # BEGIN MANAGED EXTRA-DATA
+      - type: extra-data
+        filename: solvecraft.tar.gz
+        only-arches:
+          - x86_64
+        url: https://github.com/bherbruck/solidcraft/releases/download/v0.3.1/solvecraft-0.3.1-linux-x86_64.tar.gz
+        sha256: d81b0d5796d530241cafeda11b1350a750d7c7c32a0b37632c6ad258d7d3a6da
+        size: 26540228
+      - type: extra-data
+        filename: solvecraft.tar.gz
+        only-arches:
+          - aarch64
+        url: https://github.com/bherbruck/solidcraft/releases/download/v0.3.1/solvecraft-0.3.1-linux-aarch64.tar.gz
+        sha256: f6e78b9b033c903316499802153a6f2442849dfcb6b39d27a98b7a5d507bb148
+        size: 24316860
+      # END MANAGED EXTRA-DATA
+      - type: file
+        path: apply_extra.sh
+      - type: file
+        path: solvecraft-wrapper
+      - type: file
+        path: solvecraft-cli-wrapper
+      - type: file
+        path: io.github.bherbruck.SolidCraft.desktop
+      - type: file
+        path: io.github.bherbruck.SolidCraft.metainfo.xml
+      - type: file
+        path: io.github.bherbruck.SolidCraft.mime.xml
+      - type: file
+        path: io.github.bherbruck.SolidCraft.png
