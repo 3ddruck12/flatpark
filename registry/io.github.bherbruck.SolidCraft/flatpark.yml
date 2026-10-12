@@ -1,10 +1,10 @@
-id: io.github.bherbruck.SolveCraft
-name: SolveCraft
+id: io.github.bherbruck.SolidCraft
+name: SolidCraft
 summary: Parametric 3D CAD in the style of Fusion
-website: https://bherbruck.github.io/solvecraft/
-source_url: https://github.com/bherbruck/solvecraft
+website: https://bherbruck.github.io/solidcraft/
+source_url: https://github.com/bherbruck/solidcraft
 build:
-  manifest: io.github.bherbruck.SolveCraft.yml
+  manifest: io.github.bherbruck.SolidCraft.yml
   branch: stable
   mode: extra-data
   arches: [x86_64, aarch64]

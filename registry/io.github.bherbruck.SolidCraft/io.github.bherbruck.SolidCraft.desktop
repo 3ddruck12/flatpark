@@ -1,15 +1,15 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=SolveCraft
+Name=SolidCraft
 GenericName=3D CAD
 Comment=Parametric 3D CAD: sketch, constrain, extrude, and change a parameter to rebuild
 Exec=solvecraft %f
 TryExec=solvecraft
-Icon=io.github.bherbruck.SolveCraft
+Icon=io.github.bherbruck.SolidCraft
 Terminal=false
 StartupNotify=true
-# Compiled into the 0.2.0 binary; the window class does not follow this package id.
+# Compiled into the binary (still ai.storyteller.solvecraft as of 0.3.1); the window class does not follow this package id.
 StartupWMClass=ai.storyteller.solvecraft
 Categories=Graphics;3DGraphics;Engineering;
 Keywords=cad;3d;parametric;sketch;step;stl;modelling;modeling;

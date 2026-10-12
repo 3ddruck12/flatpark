@@ -1,5 +1,5 @@
 #!/bin/sh
 set -eu
 
-# SolveCraft is staged by apply_extra at /app/extra/solvecraft.
+# SolidCraft is staged by apply_extra at /app/extra/solvecraft.
 exec /app/extra/solvecraft/bin/solvecraft "$@"

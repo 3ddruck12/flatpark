@@ -13,7 +13,7 @@ cd "$extra_root"
 archive=solvecraft.tar.gz
 [ -f "$archive" ] || { echo "missing extra-data: $archive" >&2; exit 1; }
 
-# --no-same-owner: the tarball records a non-root owner (uid 1001 on 0.2.0),
+# --no-same-owner: the tarball records a non-root owner (uid 1001),
 # and on a system-wide install Flatpak runs apply_extra as root with every
 # capability dropped, so restoring that owner fails and aborts the unpack.
 tar --no-same-owner -xzf "$archive"

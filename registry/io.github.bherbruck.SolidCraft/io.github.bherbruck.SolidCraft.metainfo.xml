@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>io.github.bherbruck.SolveCraft</id>
-  <name>SolveCraft</name>
+  <id>io.github.bherbruck.SolidCraft</id>
+  <name>SolidCraft</name>
   <summary>Parametric 3D CAD in the style of Fusion</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT OR Apache-2.0</project_license>
   <developer id="io.github.bherbruck">
-    <name>SolveCraft contributors</name>
+    <name>SolidCraft contributors</name>
   </developer>
-  <url type="homepage">https://bherbruck.github.io/solvecraft/</url>
-  <url type="bugtracker">https://github.com/bherbruck/solvecraft/issues</url>
-  <url type="vcs-browser">https://github.com/bherbruck/solvecraft</url>
+  <url type="homepage">https://bherbruck.github.io/solidcraft/</url>
+  <url type="bugtracker">https://github.com/bherbruck/solidcraft/issues</url>
+  <url type="vcs-browser">https://github.com/bherbruck/solidcraft</url>
   <description>
-    <p>This is a community package of SolveCraft, maintained independently and unaffiliated with the SolveCraft project. It repackages the official upstream Linux release build unmodified.</p>
-    <p>SolveCraft is an open-source parametric 3D CAD application written in Rust. Sketch on a plane, constrain and dimension the sketch, turn profiles into solids on a feature timeline, and change a parameter to watch the timeline rebuild.</p>
+    <p>This is a community package of SolidCraft, maintained independently and unaffiliated with the SolidCraft project. It repackages the official upstream Linux release build unmodified.</p>
+    <p>SolidCraft is an open-source parametric 3D CAD application written in Rust. Sketch on a plane, constrain and dimension the sketch, turn profiles into solids on a feature timeline, and change a parameter to watch the timeline rebuild.</p>
     <ul>
       <li>Sketches with a constraint solver and parameter-driven dimensions</li>
       <li>Extrude, revolve, sweep, loft, fillet, chamfer, shell, holes and patterns</li>
@@ -21,21 +21,21 @@
       <li>STEP and IGES import and export; 3MF, STL and OBJ</li>
       <li>Every action is a command, scriptable from a CLI, a JSON control channel and an MCP server</li>
     </ul>
-    <p>The headless command runner and MCP server is included: <code>flatpak run --command=solvecraft-cli io.github.bherbruck.SolveCraft --help</code></p>
+    <p>The headless command runner and MCP server is included: <code>flatpak run --command=solvecraft-cli io.github.bherbruck.SolidCraft --help</code></p>
     <p>Permissions: this package uses the same sandbox as upstream's own Flatpak manifest: display (Wayland, with X11 as a fallback), the GPU device, and the Documents folder. Files anywhere else are opened and saved through the system file chooser. No network access is granted.</p>
     <p>Optional overrides:</p>
     <ul>
-      <li>Let agents on the host reach the <code>--control</code> automation server: <code>flatpak override --user --share=network io.github.bherbruck.SolveCraft</code></li>
-      <li>Open files by path anywhere in your home folder: <code>flatpak override --user --filesystem=home io.github.bherbruck.SolveCraft</code></li>
+      <li>Let agents on the host reach the <code>--control</code> automation server: <code>flatpak override --user --share=network io.github.bherbruck.SolidCraft</code></li>
+      <li>Open files by path anywhere in your home folder: <code>flatpak override --user --filesystem=home io.github.bherbruck.SolidCraft</code></li>
     </ul>
   </description>
   <screenshots>
     <screenshot type="default">
       <caption>A sample part with its sketches and feature timeline</caption>
-      <image>https://raw.githubusercontent.com/bherbruck/solvecraft/main/docs/screenshots/sample-plate.png</image>
+      <image>https://raw.githubusercontent.com/bherbruck/solidcraft/main/docs/screenshots/sample-plate.png</image>
     </screenshot>
   </screenshots>
-  <launchable type="desktop-id">io.github.bherbruck.SolveCraft.desktop</launchable>
+  <launchable type="desktop-id">io.github.bherbruck.SolidCraft.desktop</launchable>
   <categories>
     <category>Graphics</category>
     <category>3DGraphics</category>
@@ -62,6 +62,6 @@
     <mediatype>application/x-solvecraft</mediatype>
   </provides>
   <releases>
-    <release version="0.2.0" date="2026-10-11"/>
+    <release version="0.3.1" date="2026-10-11"/>
   </releases>
 </component>

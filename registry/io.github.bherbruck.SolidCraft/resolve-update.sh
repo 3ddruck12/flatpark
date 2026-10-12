@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Update resolver for SolveCraft.
+# Update resolver for SolidCraft.
 #
 # Prints the current version + the official Linux release tarballs as JSON on
 # stdout:
-#   { "version": "0.2.0", "releaseDate": "YYYY-MM-DD",
+#   { "version": "0.3.1", "releaseDate": "YYYY-MM-DD",
 #     "sources": [ { "filename": "solvecraft.tar.gz", "arch": "x86_64",  "url": "..." },
 #                  { "filename": "solvecraft.tar.gz", "arch": "aarch64", "url": "..." } ] }
 # Logs go to stderr. No hashing — FlatPark downloads the URL and computes the
@@ -11,7 +11,7 @@
 # <release> in the AppStream metainfo.
 set -euo pipefail
 
-repo="bherbruck/solvecraft"
+repo="bherbruck/solidcraft"
 
 need() { command -v "$1" >/dev/null 2>&1 || { echo "missing command: $1" >&2; exit 1; }; }
 need curl; need jq
@@ -33,10 +33,10 @@ url_x86_64="$(asset_url x86_64)"
 url_aarch64="$(asset_url aarch64)"
 
 [ -n "$version" ] && [ "$version" != "null" ] && [ -n "$url_x86_64" ] && [ -n "$url_aarch64" ] || {
-  echo "failed to resolve SolveCraft release" >&2
+  echo "failed to resolve SolidCraft release" >&2
   exit 1
 }
-echo "resolved SolveCraft $version ($date): $url_x86_64" >&2
+echo "resolved SolidCraft $version ($date): $url_x86_64" >&2
 
 jq -n --arg v "$version" --arg d "$date" --arg ux "$url_x86_64" --arg ua "$url_aarch64" \
   '{version:$v, releaseDate:$d, sources:[

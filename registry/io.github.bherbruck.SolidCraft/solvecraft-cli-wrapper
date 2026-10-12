@@ -2,5 +2,5 @@
 set -eu
 
 # Headless command runner and MCP server, reachable as
-#   flatpak run --command=solvecraft-cli io.github.bherbruck.SolveCraft ...
+#   flatpak run --command=solvecraft-cli io.github.bherbruck.SolidCraft ...
 exec /app/extra/solvecraft/bin/solvecraft-cli "$@"
