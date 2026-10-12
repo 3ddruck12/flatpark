@@ -1,0 +1,107 @@
+id: org.eurooffice.desktopeditors
+runtime: org.freedesktop.Platform
+runtime-version: "26.08"
+sdk: org.freedesktop.Sdk
+command: euro-office
+separate-locales: false
+build-options:
+  no-debuginfo: true
+# Euro-Office has no Flatpak id of its own. org.onlyoffice.desktopeditors is a
+# different application (already on Flathub) and is not reused. This id names
+# the Euro-Office build. The window class stays Euro-Office, which is what the
+# binary actually sets (StartupWMClass in the upstream .desktop).
+finish-args:
+  # Qt 6 + CEF editors. GTK3, NSS, CUPS, ATK, dbus, ALSA, GStreamer and X11
+  # come from org.freedesktop.Platform 26.08. libgssapi_krb5.so.2 does not;
+  # apply_extra unpacks it from Debian next to the app.
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  # CEF compositing.
+  - --device=dri
+  # Presentations and embedded media play sound.
+  - --socket=pulseaudio
+  # File -> Print talks to CUPS.
+  - --socket=cups
+  - --talk-name=org.freedesktop.Notifications
+  # Documents is where an office suite saves, and Downloads is where
+  # attachments land. Everything else goes through the file chooser. The
+  # .desktop Exec ends in %U, so files opened from a file manager arrive
+  # through the document portal.
+  - --filesystem=xdg-documents
+  - --filesystem=xdg-download
+  # Deliberately not granted:
+  #   --share=network       -> connecting to a document server. The metainfo
+  #                            documents the override. Local editing does not
+  #                            need it.
+  #   --filesystem=home     -> the rest of $HOME stays invisible
+modules:
+  - name: euro-office
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 apply_extra.sh /app/bin/apply_extra
+      - install -Dm755 euro-office-wrapper /app/bin/euro-office
+      - install -Dm644 org.eurooffice.desktopeditors.desktop /app/share/applications/org.eurooffice.desktopeditors.desktop
+      - install -Dm644 org.eurooffice.desktopeditors.metainfo.xml /app/share/metainfo/org.eurooffice.desktopeditors.metainfo.xml
+      - install -Dm644 org.eurooffice.desktopeditors.png /app/share/icons/hicolor/256x256/apps/org.eurooffice.desktopeditors.png
+    sources:
+      # BEGIN MANAGED EXTRA-DATA
+      - type: extra-data
+        filename: euro-office.tar.xz
+        only-arches:
+          - x86_64
+        url: https://github.com/Euro-Office/DesktopEditors/releases/download/v9.3.5-2/euro-office-euro-office-9.3.5-2-x86_64.tar.xz
+        sha256: c846d3eca0ec94c9fd1ffe23b3f8d04f70eb158c7332cbfa426056eca932bc56
+        size: 497902864
+      # END MANAGED EXTRA-DATA
+      # libQt6Network links libgssapi_krb5.so.2 and the runtime has no Kerberos.
+      # scripts/update-debian-pins.mjs re-resolves these from the suite index;
+      # filename minus .deb is the binary package name, and that is the whole
+      # contract. amd64 only: that script reads binary-amd64.
+      # BEGIN MANAGED DEBIAN trixie main
+      - type: extra-data
+        filename: libgssapi-krb5-2.deb
+        only-arches:
+          - x86_64
+        url: https://deb.debian.org/debian/pool/main/k/krb5/libgssapi-krb5-2_1.21.3-5+deb13u1_amd64.deb
+        sha256: 30847c1fde4240567d7ed3aeab4f655dd591203758b857e85e824045aae70299
+        size: 138356
+      - type: extra-data
+        filename: libkrb5-3.deb
+        only-arches:
+          - x86_64
+        url: https://deb.debian.org/debian/pool/main/k/krb5/libkrb5-3_1.21.3-5+deb13u1_amd64.deb
+        sha256: 47d71d6a7f2e59b9bae5f89602397594805113b95889ad18fa703cd53abafc97
+        size: 326056
+      - type: extra-data
+        filename: libk5crypto3.deb
+        only-arches:
+          - x86_64
+        url: https://deb.debian.org/debian/pool/main/k/krb5/libk5crypto3_1.21.3-5+deb13u1_amd64.deb
+        sha256: 7da07ee674b47f1f0be7cc89317c25310086a1f1761217d0f72e6ae2c5a69b84
+        size: 81152
+      - type: extra-data
+        filename: libkrb5support0.deb
+        only-arches:
+          - x86_64
+        url: https://deb.debian.org/debian/pool/main/k/krb5/libkrb5support0_1.21.3-5+deb13u1_amd64.deb
+        sha256: 3a0acd8b37955c0e102c756b52c97df2a31f67b96453c35dab70df218d309117
+        size: 33124
+      - type: extra-data
+        filename: libkeyutils1.deb
+        only-arches:
+          - x86_64
+        url: https://deb.debian.org/debian/pool/main/k/keyutils/libkeyutils1_1.6.3-6_amd64.deb
+        sha256: 0b11ad17be0300b63ad4eeb4c6450fed24d34b7b740f23e5363dcb29ee6d5eba
+        size: 9456
+      # END MANAGED DEBIAN
+      - type: file
+        path: apply_extra.sh
+      - type: file
+        path: euro-office-wrapper
+      - type: file
+        path: org.eurooffice.desktopeditors.desktop
+      - type: file
+        path: org.eurooffice.desktopeditors.metainfo.xml
+      - type: file
+        path: org.eurooffice.desktopeditors.png

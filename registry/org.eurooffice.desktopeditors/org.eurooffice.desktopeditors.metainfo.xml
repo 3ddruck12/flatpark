@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.eurooffice.desktopeditors</id>
+  <name>Euro-Office</name>
+  <summary>Edit documents, spreadsheets, presentations and PDFs</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>AGPL-3.0-only AND CC-BY-SA-4.0</project_license>
+  <developer id="org.eurooffice">
+    <name>Euro-Office</name>
+  </developer>
+  <url type="homepage">https://github.com/Euro-Office/DesktopEditors</url>
+  <url type="bugtracker">https://github.com/Euro-Office/DesktopEditors/issues</url>
+  <url type="vcs-browser">https://github.com/Euro-Office/DesktopEditors</url>
+  <description>
+    <p>This is a community package of Euro-Office Desktop Editors, maintained independently. It repackages the official upstream Linux archive unmodified.</p>
+    <p>Euro-Office is a free office suite for text documents, spreadsheets, presentations and PDFs. It opens and writes Office Open XML (.docx, .xlsx, .pptx) and OpenDocument files, and it edits documents stored on the computer without an Internet connection.</p>
+    <p>Documents and Downloads are visible to the application. Other files are opened through the file chooser, and only the ones you pick become visible. Settings and the document cache stay in the application's private directory. Printing uses CUPS.</p>
+    <p>The separate help package upstream suggests is not part of this install. The editors open without it; offline help pages from that package are absent.</p>
+    <p>Optional grants, each with <code>flatpak override --user</code>: <code>--share=network</code> to connect to a document server; <code>--filesystem=home</code> to open and save files outside Documents and Downloads. Remove custom grants with <code>flatpak override --user --reset org.eurooffice.desktopeditors</code>.</p>
+  </description>
+  <launchable type="desktop-id">org.eurooffice.desktopeditors.desktop</launchable>
+  <categories>
+    <category>Office</category>
+  </categories>
+  <keywords>
+    <keyword>office</keyword>
+    <keyword>word</keyword>
+    <keyword>spreadsheet</keyword>
+    <keyword>presentation</keyword>
+    <keyword>pdf</keyword>
+    <keyword>docx</keyword>
+    <keyword>xlsx</keyword>
+    <keyword>odt</keyword>
+  </keywords>
+  <content_rating type="oars-1.1"/>
+  <recommends>
+    <control>keyboard</control>
+    <control>pointing</control>
+  </recommends>
+  <provides>
+    <binary>euro-office</binary>
+    <mediatype>application/vnd.openxmlformats-officedocument.wordprocessingml.document</mediatype>
+    <mediatype>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</mediatype>
+    <mediatype>application/vnd.openxmlformats-officedocument.presentationml.presentation</mediatype>
+    <mediatype>application/vnd.oasis.opendocument.text</mediatype>
+    <mediatype>application/vnd.oasis.opendocument.spreadsheet</mediatype>
+    <mediatype>application/vnd.oasis.opendocument.presentation</mediatype>
+    <mediatype>application/pdf</mediatype>
+  </provides>
+  <releases>
+    <release version="9.3.5-2" date="2026-10-09"/>
+  </releases>
+</component>
