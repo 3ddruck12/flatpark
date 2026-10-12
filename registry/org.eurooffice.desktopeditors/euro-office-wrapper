@@ -14,4 +14,6 @@ ln -sfn /app/extra/opt/euro-office/euro-office /opt/euro-office/euro-office
 # tree and keeps whatever LD_LIBRARY_PATH is already set.
 export LD_LIBRARY_PATH="/app/extra/deps${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 
-exec /app/extra/usr/bin/euro-office-euro-office "$@"
+# The .tar.xz records this launcher as mode 644, so exec would fail. Run it
+# with the shell. The script itself is the vendor file, unmodified.
+exec /bin/sh /app/extra/usr/bin/euro-office-euro-office "$@"

@@ -12,7 +12,7 @@
   <url type="bugtracker">https://github.com/Euro-Office/DesktopEditors/issues</url>
   <url type="vcs-browser">https://github.com/Euro-Office/DesktopEditors</url>
   <description>
-    <p>This is a community package of Euro-Office Desktop Editors, maintained independently. It repackages the official upstream .deb unmodified.</p>
+    <p>This is a community package of Euro-Office Desktop Editors, maintained independently. It repackages the official upstream Linux archive unmodified.</p>
     <p>Euro-Office is a free office suite for text documents, spreadsheets, presentations and PDFs. It opens and writes Office Open XML (.docx, .xlsx, .pptx) and OpenDocument files, and it edits documents stored on the computer without an Internet connection.</p>
     <p>Documents and Downloads are visible to the application. Other files are opened through the file chooser, and only the ones you pick become visible. Settings and the document cache stay in the application's private directory. Printing uses CUPS.</p>
     <p>The separate help package upstream suggests is not part of this install. The editors open without it; offline help pages from that package are absent.</p>
