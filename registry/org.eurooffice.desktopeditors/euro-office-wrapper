@@ -1,0 +1,17 @@
+#!/bin/sh
+set -eu
+
+# The vendor launcher shipped in the .deb hardcodes its install prefix as
+# /opt/euro-office/euro-office, puts that tree on LD_LIBRARY_PATH, and preloads
+# the vendor's own libcef.so before exec. /opt does not exist in the sandbox
+# and the unpacked tree lives under /app/extra, so recreate the prefix as a
+# symlink and run that launcher unchanged. The payload on disk is not modified.
+mkdir -p /opt/euro-office
+ln -sfn /app/extra/opt/euro-office/euro-office /opt/euro-office/euro-office
+
+# libQt6Network in this build needs libgssapi_krb5.so.2. apply_extra stages the
+# Debian libraries in /app/extra/deps. The vendor launcher prepends its own
+# tree and keeps whatever LD_LIBRARY_PATH is already set.
+export LD_LIBRARY_PATH="/app/extra/deps${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+
+exec /app/extra/usr/bin/euro-office-euro-office "$@"
