@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Sele
+Comment=Desktop workspace for AI coding agents and local projects
+Exec=sele %U
+Terminal=false
+Type=Application
+Icon=com.chipichapa.sele
+StartupWMClass=com.chipichapa.sele
+Categories=Development;
+Keywords=AI;Codex;Claude;Copilot;OpenCode;Terminal;

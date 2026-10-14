@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+
+unset ELECTRON_RUN_AS_NODE
+# Zypak, supplied by the Electron base app, preserves Chromium's sandbox.
+# Electron 38 uses --ozone-platform; select the exposed Wayland socket, with
+# X11 as the fallback when Flatpak has not exposed one.
+if [ -n "${WAYLAND_DISPLAY:-}" ]; then
+    set -- --ozone-platform=wayland "$@"
+fi
+exec zypak-wrapper /app/extra/sele/sele "$@"

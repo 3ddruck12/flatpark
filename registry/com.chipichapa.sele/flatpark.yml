@@ -1,0 +1,32 @@
+id: com.chipichapa.sele
+name: Sele
+summary: Desktop workspace for AI coding agents and local projects
+website: https://github.com/Chipi-Chapa-Corp/sele
+source_url: https://github.com/Chipi-Chapa-Corp/sele
+build:
+  manifest: com.chipichapa.sele.yml
+  branch: stable
+  mode: extra-data
+  arches: [x86_64]
+catalog:
+  category: Development
+  upstream_approved: true
+  tags:
+    - AI
+    - Coding
+    - Agents
+    - Terminal
+    - Electron
+update:
+  command: ./resolve-update.sh
+policy:
+  proprietary: false
+  extra_data_first: true
+  dangerous_permissions:
+    - --filesystem=host
+    - --talk-name=org.freedesktop.Flatpak
+packaging:
+  - kind: host-command
+    detail:
+      en: "Sele runs your installed coding-agent CLIs, Git and shells on the host through flatpak-spawn, and reads and edits local project files. These permissions allow arbitrary host commands and access to host files."
+      zh-Hans: "Sele 通过 flatpak-spawn 在宿主机上运行已安装的编程代理 CLI、Git 和 shell，并读取和编辑本地项目文件。这些权限允许执行任意宿主机命令并访问宿主机文件。"

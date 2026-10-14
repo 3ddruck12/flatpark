@@ -1,0 +1,53 @@
+id: com.chipichapa.sele
+runtime: org.freedesktop.Platform
+runtime-version: "26.08"
+sdk: org.freedesktop.Sdk
+base: org.electronjs.Electron2.BaseApp
+base-version: "26.08"
+command: sele
+separate-locales: false
+build-options:
+  no-debuginfo: true
+finish-args:
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --share=ipc
+  - --device=dri
+  # Provider connections, the embedded browser and remote development.
+  - --share=network
+  # Sele opens, reads and edits arbitrary local repositories. Its upstream
+  # Flatpak uses the same grant; see policy.dangerous_permissions and the PR.
+  - --filesystem=host
+  # The core provider, Git and terminal paths use flatpak-spawn --host to run
+  # the user's installed/authenticated CLIs and toolchains, not bundled ones.
+  - --talk-name=org.freedesktop.Flatpak
+  - --unset-env=ELECTRON_RUN_AS_NODE
+modules:
+  - name: sele
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 apply_extra.sh /app/bin/apply_extra
+      - install -Dm755 sele-wrapper /app/bin/sele
+      - install -Dm644 com.chipichapa.sele.desktop /app/share/applications/com.chipichapa.sele.desktop
+      - install -Dm644 com.chipichapa.sele.metainfo.xml /app/share/metainfo/com.chipichapa.sele.metainfo.xml
+      - install -Dm644 com.chipichapa.sele.png /app/share/icons/hicolor/512x512/apps/com.chipichapa.sele.png
+    sources:
+      # BEGIN MANAGED EXTRA-DATA
+      - type: extra-data
+        filename: sele.tar.gz
+        only-arches:
+          - x86_64
+        url: https://github.com/Chipi-Chapa-Corp/sele/releases/download/v3.5.0/sele-linux-x64.tar.gz
+        sha256: 300141fcf224ab4e66009042b3c8b0268f131638f77ebd60626563da5811ff7e
+        size: 273009597
+      # END MANAGED EXTRA-DATA
+      - type: file
+        path: apply_extra.sh
+      - type: file
+        path: sele-wrapper
+      - type: file
+        path: com.chipichapa.sele.desktop
+      - type: file
+        path: com.chipichapa.sele.metainfo.xml
+      - type: file
+        path: com.chipichapa.sele.png
