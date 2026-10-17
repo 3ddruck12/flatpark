@@ -2,7 +2,7 @@
 // that wants the whole library in a single fetch. Each page keeps its source
 // URL so a reader can tell where one ends and the next begins.
 import { loadCatalog } from '../lib/data.mjs';
-import { buildNav, getDocsFor } from '../lib/docs';
+import { buildNav, flattenNav, getDocsFor } from '../lib/docs';
 
 export async function GET() {
   const { repo } = loadCatalog();
@@ -11,7 +11,7 @@ export async function GET() {
   const index = docs.find((d) => d.base === 'README');
   const ordered = [
     ...(index ? [index] : []),
-    ...buildNav(docs).flatMap((s) => [...(s.index ? [s.index] : []), ...s.pages]),
+    ...flattenNav(buildNav(docs)),
   ];
   const parts = ordered.map((d) => `<!-- ${site}/docs/${d.base}.md -->\n\n${(d.entry.body ?? '').trim()}\n`);
   return new Response(parts.join('\n---\n\n'), {
