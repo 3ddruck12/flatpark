@@ -42,7 +42,11 @@ does it stop us shipping our own bugs, and does it keep that speed?
 FlatPark is built on [Flatpak](https://flatpak.org/) and is **not affiliated
 with [Flathub](https://flathub.org/)**. Flathub builds most apps from source;
 FlatPark deliberately only repackages official downloads (extra-data). The two
-are complementary — if an app is on Flathub, install it there.
+are complementary. When a developer publishes their app on Flathub themselves,
+install it there; FlatPark doesn't package it. FlatPark offers an app that is
+also on Flathub only when someone else maintains the Flathub package and there
+is a clear reason, such as a missing feature or a long delay, and the app's
+description says how the two differ.
 
 ## Who runs it
 

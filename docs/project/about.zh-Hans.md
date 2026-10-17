@@ -20,7 +20,7 @@ FlatPark 的目标是做一个高效运转、容易参与的 Flatpak remote。�
 
 ## 与 Flatpak 和 Flathub 的关系
 
-FlatPark 基于 [Flatpak](https://flatpak.org/) 构建，且**与 [Flathub](https://flathub.org/) 没有关联**。Flathub 会从源码构建大多数应用；FlatPark 则有意只重新打包官方下载产物（extra-data）。二者相互补充——如果某个应用已在 Flathub 上提供，请从 Flathub 安装。
+FlatPark 基于 [Flatpak](https://flatpak.org/) 构建，且**与 [Flathub](https://flathub.org/) 没有关联**。Flathub 会从源码构建大多数应用；FlatPark 则有意只重新打包官方下载产物（extra-data）。二者相互补充。开发者自己在 Flathub 上发布的应用，请从 Flathub 安装，FlatPark 不会再打包。只有当 Flathub 上的包由别人维护、而且有明确理由（比如缺少某个功能、更新严重滞后）时，FlatPark 才会同时提供，并在应用描述里写明两者的区别。
 
 ## 谁在运营 FlatPark
 
