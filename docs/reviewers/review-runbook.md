@@ -20,10 +20,9 @@ it never merges or publishes.**
 > isolated temp dir, inspect before extracting, and run nothing inside. If a
 > decision genuinely needs execution to resolve, escalate to a human.
 
-This runbook is the single source of truth; the public
-[listing policies](../project/policies.md) and the
-[packager docs](../packagers/README.md) are audience-tuned
-summaries of it. It layers on top of `.github/workflows/pr-checks.yml` (which
+The rules it applies are in the [packager docs](../packagers/README.md) and the
+[listing policies](../project/policies.md); this runbook is how a PR is checked
+against them. It layers on top of `.github/workflows/pr-checks.yml` (which
 validates descriptors, tests, dead-link-checks, and does a no-secrets fork
 build) and the `scripts/audit-descriptor.mjs` guardrails — this runbook owns the
 judgment calls CI can't make. Running the app is the packager's part, recorded
@@ -33,32 +32,41 @@ checks that record, not the app.
 ## Provenance-based trust model
 
 License is **not** the trust axis — it is compliance input only. Non-FOSS is
-allowed (the registry ships proprietary broker apps), and open-source apps are
-often shipped as official prebuilts rather than source builds (e.g. electerm).
-What matters is **where the bytes you run come from**. Place each submission in a
-tier:
+allowed (the registry ships proprietary broker apps). Every package is an
+official upstream build fetched as extra-data; FlatPark never builds an app
+from source. What matters is **where the bytes you run come from**, and, when
+the app is open source, whether its public code does anything malicious.
 
-- **Tier 1 — source-built / reproducible / source-verifiable.** Shipped
-  interpreted code is byte-for-byte identical to the public source, or the build
-  is reproducible from the manifest.
-- **Tier 2 — official upstream prebuilt (the dominant case).** The vendor's or
-  genuine project's own release, repackaged unmodified. Requires: (1) **official
-  download source** — every `extra-data`/`archive` URL on the vendor's official
-  domain or genuine upstream repo, not the submitter's account or a mirror;
-  (2) **unmodified repackage** — `build-commands` only install the wrapper/
-  desktop/metainfo/icon + an `apply_extra` that unpacks the official download; no
-  patch/`sed`/recompile of the payload; shipped artifact == what the official
-  URL serves. *External* sandbox adaptation is allowed and does not break Tier 2:
-  wrapper env vars, a library the runtime lacks (from a shared `flatpark/prebuilt`
-  stack or a second `extra-data` source — not a per-app source build into the ref;
-  see Phase 3), `PATH` scripts that forward host commands — review those as code,
-  since they run. **Code injected into the app process** (an `LD_PRELOAD` shim, a
-  patched or replaced upstream file) is not external adaptation: an open-source app
-  that needs it is rejected (the fix belongs upstream), and a proprietary app may
-  carry it only when its metainfo description says plainly what is injected and why
-  (`com.schwab.thinkorswim`). (3) **pinned bytes** — sha256 (+ size for extra-data).
-- **Tier 3 — opaque third-party / submitter-built binary.** Neither
-  source-verifiable nor a pinned official-upstream release (PR #13). **Reject.**
+Every acceptable submission meets the **base requirements**:
+
+1. **Official download source** — every `extra-data`/`archive` URL is on the
+   vendor's official domain or the genuine upstream repository, not the
+   submitter's account or a mirror.
+2. **Unmodified repackage** — `build-commands` only install the wrapper,
+   desktop file, metainfo, icon and an `apply_extra` that unpacks the official
+   download; no patch, `sed` or recompile of the payload; the shipped artifact is
+   what the official URL serves. *External* sandbox adaptation is allowed:
+   wrapper env vars, a library the runtime lacks (from a shared
+   `flatpark/prebuilt` stack or a second `extra-data` source — not a per-app
+   build into the ref; see Phase 3), `PATH` scripts that forward host commands —
+   review those as code, since they run. **Code injected into the app process**
+   (an `LD_PRELOAD` shim, a patched or replaced upstream file) is not external
+   adaptation: an open-source app that needs it is rejected (the fix belongs
+   upstream), and a proprietary app may carry it only when its metainfo
+   description says plainly what is injected and why (`com.schwab.thinkorswim`).
+3. **Pinned bytes** — sha256 (+ size for extra-data).
+
+Then place it in a tier:
+
+- **Tier 1 — open-source app.** On top of the base requirements, review the
+  upstream source at the released tag for malicious behaviour (exfiltration,
+  persistence, miners, download-and-run of unpinned code). Where the release
+  ships interpreted code (an Electron `app.asar`, Python), spot-check that it
+  matches the public source.
+- **Tier 2 — closed-source app.** The base requirements only: provenance is
+  the whole check, since the code can't be read.
+- **Tier 3 — opaque third-party / submitter-built binary.** Not an official
+  upstream release (PR #13). **Reject.**
 
 ## Phases
 
@@ -122,7 +130,7 @@ artifact provenance tier (1/2/3).
 - **source URLs** resolve to genuine upstream (no lookalike / fork).
 - **`app-id`** reverse-DNS matches the real vendor (impersonation / typosquat).
 - **`update.command`** is a simple relative script path (e.g. `./resolve-update.sh`).
-- **[Tier 2]** download host = official vendor domain / upstream, not the
+- download host = official vendor domain / upstream, not the
   submitter's personal namespace.
 
 ### Phase 4 — Runtime-behavior scan
@@ -143,18 +151,19 @@ code. Note network endpoints and broad filesystem×network combos.
   entries, reject traversal/symlink-escape/setuid; zip → list with zip tooling,
   same checks; deb/rpm → inspect payload without running maintainer scripts
   (review those statically); shell installer (`.sh`) → static review where
-  practical, else treat as opaque official prebuilt needing stronger Tier-2
+  practical, else treat as an opaque official prebuilt needing stronger
   provenance + human judgment; **AppImage → accepted**: it must be cracked offline,
   never executed — `apply_extra` runs `flatpark/prebuilt`'s `appimage-tools`
   (`appimage-offset` + `unsquashfs -o <offset>`) against the appended SquashFS, with
   **no libfuse and no `./*.AppImage` invocation**. Reject an AppImage recipe that
   runs the stub, wants FUSE, or `--extract`s by executing it.
-- **[Tier 1]** shipped interpreted code == public source (byte-diff each file).
-- **[Tier 2]** shipped artifact == official download (re-fetch + hash-compare);
+- **[Tier 1]** upstream source at the released tag reviewed for malicious
+  behaviour; shipped interpreted code spot-checked against it.
+- shipped artifact == official download (re-fetch + hash-compare);
   build did not alter the payload.
-- Any "official" prebuilt (node, electron, a JRE, …) hash-verified against the
-  real upstream (compare code sections / build-id where a canonical artifact
-  exists, as done for `node`). From-source builds with no reproducible build →
+- Any bundled third-party runtime (node, electron, a JRE, …) hash-verified
+  against the real upstream where a canonical artifact exists (compare code
+  sections / build-id, as done for `node`); one that can't be matched →
   NEEDS-HUMAN, not PASS.
 - IOC scan: persistence (autostart/cron/systemd/`.bashrc`), miners
   (`xmrig`/`stratum+`), reverse shells (`/dev/tcp`, `nc -e`), hardcoded IPs,
@@ -178,8 +187,9 @@ Reviewer recommends only — a human merges.
 - Unpinned / mutable source for its type (git without commit; archive/extra-data
   without sha256; extra-data `size: 0`).
 - Tier 3 provenance (opaque third-party / submitter-built binary).
-- [Tier 1] shipped code ≠ public source.
-- [Tier 2] download source not official, OR packaging patches/recompiles the
+- [Tier 1] malicious code in the upstream source, or shipped code that
+  doesn't match it.
+- Download source not official, OR packaging patches/recompiles the
   payload, OR shipped artifact ≠ official download. (External adaptation —
   wrapper env, extra library modules, `PATH` scripts — is not a modification;
   review it as code.)
@@ -201,7 +211,7 @@ Reviewer recommends only — a human merges.
   existing app's resolver (a resolver in a brand-new app dir is not tampering).
 - Throwaway account **+** Tier-3 binary (the PR #13 combination).
 
-**NEEDS-HUMAN:** from-source binaries not byte-verifiable · novel permission
+**NEEDS-HUMAN:** bundled runtimes that can't be matched to upstream · novel permission
 needing justification · borderline provenance · unknown source type · shell
 installer that can't be statically reviewed.
 
@@ -211,7 +221,7 @@ installer that can't be statically reviewed.
 
 Copy this per PR and fill it in. Legend: ✅ pass · ❌ fail (hard-reject) ·
 ⚠️ warn (needs justification) · 👤 needs-human · ➖ N/A. Tier: 1 =
-source-verifiable · 2 = official prebuilt · ★ = all.
+open source · 2 = closed source · ★ = all.
 
 | # | Phase | Check | Tier | Verdict | Evidence (cmd output / `file:line` / hash / url) |
 |---|---|---|---|---|---|
@@ -223,7 +233,7 @@ source-verifiable · 2 = official prebuilt · ★ = all.
 | 2.3 | Provenance | Commit identity sane (no malformed email) | ★ | | |
 | 2.4 | Provenance | Timeline plausible (not account→repo→release within hours) | ★ | | |
 | 2.5 | Provenance | Trust tier: established / unknown-plausible / throwaway-suspicious | ★ | | |
-| 2.6 | Provenance | Artifact provenance tier: 1 source-verifiable / 2 official prebuilt / 3 opaque (→reject) | ★ | | |
+| 2.6 | Provenance | Tier: 1 open source / 2 closed source / 3 opaque (→reject) | ★ | | |
 | 3.1 | Manifest | Sources pinned per type (git→commit; archive/extra-data→sha256; extra-data size≠0; file→local) | ★ | | |
 | 3.1b | Manifest | Only a shared `flatpark/prebuilt` stack lands remote bytes in `/app`; app payload + single-app deps are `extra-data`, not built into the ref | ★ | | |
 | 3.2 | Manifest | finish-args has no escape perms (or: declared in `dangerous_permissions` + justified → needs-human); broad perms justified | ★ | | |
@@ -233,7 +243,7 @@ source-verifiable · 2 = official prebuilt · ★ = all.
 | 3.5 | Manifest | source URLs = genuine upstream (no lookalike / fork) | ★ | | |
 | 3.6 | Manifest | `app-id` reverse-DNS matches real vendor (no impersonation) | ★ | | |
 | 3.7 | Manifest | `update.command` is a simple relative script path | ★ | | |
-| 3.8 | Manifest | download host = official vendor domain / upstream, not submitter account | 2 | | |
+| 3.8 | Manifest | download host = official vendor domain / upstream, not submitter account | ★ | | |
 | 3.9 | Manifest | Optional caps not pre-granted: documented as `flatpak override` in metainfo; any broad grant kept in `finish-args` justified in the PR | ★ | | |
 | 3.10 | Manifest | PR body attests to a local build + `flatpak install` + launch smoke-test, with gaps named | ★ | | |
 | 4.1 | Runtime | No runtime fetch-and-exec of arbitrary/unpinned code (vendor self-updater to data dir, behavior unpatched = OK) | ★ | | |
@@ -241,9 +251,9 @@ source-verifiable · 2 = official prebuilt · ★ = all.
 | 4.3 | Runtime | Network endpoints noted; no broad filesystem×network combo | ★ | | |
 | 5.1 | Artifact | extra-data sha256 == manifest pin | ★ | | |
 | 5.2 | Artifact | Inspected per type (tar/zip/tgz/deb/rpm listed clean; AppImage cracked offline via `appimage-tools` `unsquashfs`, stub never run; .sh static-or-opaque); no traversal/symlink/setuid | ★ | | |
-| 5.3 | Artifact | shipped interpreted code == public source (byte diff) | 1 | | |
-| 5.4 | Artifact | shipped artifact == official download (re-fetch & hash); build did not alter payload | 2 | | |
-| 5.5 | Artifact | "official" prebuilts hash-verified vs upstream (from-source w/o reproducible → NEEDS-HUMAN) | ★ | | |
+| 5.3 | Artifact | upstream source at the released tag reviewed for malicious behaviour; shipped interpreted code spot-checked against it | 1 | | |
+| 5.4 | Artifact | shipped artifact == official download (re-fetch & hash); build did not alter payload | ★ | | |
+| 5.5 | Artifact | bundled third-party runtimes hash-verified vs upstream where possible (unmatched → NEEDS-HUMAN) | ★ | | |
 | 5.6 | Artifact | IOC scan clean (persistence/miner/reverse-shell/hardcoded-IP/embedded-ELF/RPATH) | ★ | | |
 | 6.1 | Compliance | Purpose legal & policy-compliant (not piracy/malware/trademark/illegal-to-distribute) | ★ | | |
 | 6.2 | Compliance | Non-FOSS is NOT a rejection reason | ★ | | |
