@@ -1,7 +1,7 @@
 # Packagers
 
 How to add an app to FlatPark and keep it working. Read in this order:
-[can it be packaged?](can-it-be-packaged.md), [what a package is](basics.md)
+[finding apps](finding-apps.md), [can it be packaged?](can-it-be-packaged.md), [what a package is](basics.md)
 (the files, what runs when, and the extra-data rule),
 [choosing a format](formats/README.md) and the page for the download you
 picked, [prebuilt stacks](prebuilt.md) for libraries the runtime lacks,

@@ -34,27 +34,13 @@ their own yet. Where this page and a linked page disagree, the linked page wins.
 
 ---
 
-## 1. Discover — two channels
+## 1. Find a candidate
 
-Rank candidates by fit, not stars: not on Flathub, a clean sandbox and
-extra-data story, maintained, genuinely useful; >~200 stars is already popular
-enough. Full crawl queries live in [`discovery-pipeline.md`](../internal/discovery-pipeline.md) §1–2. In short:
-
-- **Community (high-star, not on Flathub).** Apps shipping an official Linux GUI binary,
-  searched by GitHub topics (`topic:linux topic:electron/tauri/gtk/qt/...`). Weaker demand
-  signal, but real products.
-- **Flathub `AI Slop`-labelled PRs.** Rejected on policy grounds (AI-authored manifest,
-  "must build from source") — often *real* apps in exactly FlatPark's niche. Higher demand
-  signal (someone already tried to submit it).
-  `gh api search/issues -f q='repo:flathub/flathub is:pr label:"AI Slop" created:>=<date>'`
-
-**Per candidate, record demand + prior art** (drives go/no-go and the §6 comment):
-- Upstream tracker: search their own issues for Flatpak/Flathub requests + the **maintainer's
-  stance** (their concerns reveal real blockers).
-- Prior Flathub PRs for this app and **why they closed**.
-
-Re-run these crawls on a **periodic cadence** — the point is catching newly-released apps and
-freshly-rejected Flathub PRs, not a one-off sweep.
+[Finding apps](finding-apps.md): the channels (GitHub popular apps, Flathub's
+closed submissions, Flathub packages that fell behind, requests), the Flathub
+checks, and how to rank by fit. Record demand and prior attempts for each
+candidate; the PR and any upstream message use them. Re-run the searches
+periodically to catch new releases and new Flathub rejections.
 
 ## 2. Check it can be packaged
 
@@ -194,7 +180,8 @@ said no.
 
 ## 8. Cadence & automation
 
-- **Re-crawl (§1) periodically** to catch new releases and freshly-rejected Flathub PRs.
+- **Re-run the searches in [finding apps](finding-apps.md) periodically** to catch new releases
+  and freshly-rejected Flathub PRs.
 - Each app's `resolve-update.sh` already lets FlatPark re-pin & rebuild on new upstream releases —
   no manual version bumps.
 - **A broken upstream repackage opens an issue.** When `update-check`'s payload gate rejects a new
