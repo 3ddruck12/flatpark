@@ -2,12 +2,12 @@
 // "how do I install <app> on Linux". Generated from the same catalog data as
 // the pages so it never drifts from what the remote actually serves.
 import { loadApps, loadCatalog } from '../lib/data.mjs';
-import { buildNav, getDocsFor } from '../lib/docs';
+import { buildNav, flattenNav, getDocsFor } from '../lib/docs';
 
 export async function GET() {
   const { repo } = loadCatalog();
   const apps = loadApps();
-  const docs = buildNav(await getDocsFor('en')).flatMap((s) => [...(s.index ? [s.index] : []), ...s.pages]);
+  const docs = flattenNav(buildNav(await getDocsFor('en')));
   const site = (repo.homepage || 'https://flatpark.org').replace(/\/$/, '');
 
   const lines = [

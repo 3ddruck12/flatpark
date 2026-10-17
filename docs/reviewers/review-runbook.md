@@ -22,7 +22,7 @@ it never merges or publishes.**
 
 This runbook is the single source of truth; the public
 [listing policies](../project/policies.md) and the
-[publishing guide](../packagers/publishing.md) are audience-tuned
+[packager docs](../packagers/README.md) are audience-tuned
 summaries of it. It layers on top of `.github/workflows/pr-checks.yml` (which
 validates descriptors, tests, dead-link-checks, and does a no-secrets fork
 build) and the `scripts/audit-descriptor.mjs` guardrails — this runbook owns the

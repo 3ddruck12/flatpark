@@ -17,6 +17,8 @@ export interface Doc {
   slug: string;
   /** Top-level directory, '' for the library index. */
   section: string;
+  /** Subdirectory within the section (`formats`), '' for a page at its top. */
+  group: string;
   isIndex: boolean;
   title: string;
   description: string;
@@ -26,11 +28,23 @@ export interface Doc {
   file: string;
 }
 
+/** A subdirectory of a section (`packagers/formats/`), its README as the heading. */
+export interface NavGroup {
+  dir: string;
+  index?: Doc;
+  title: string;
+  order: number;
+  pages: Doc[];
+}
+
+export type NavItem = { page: Doc } | { group: NavGroup };
+
 export interface NavSection {
   section: string;
   index?: Doc;
   title: string;
-  pages: Doc[];
+  /** Pages and subdirectories, in sidebar order. */
+  items: NavItem[];
 }
 
 // Sidebar order. A new top-level directory still shows up, after these.
@@ -44,11 +58,14 @@ function titleOf(entry: Entry): string {
 
 function toDoc(base: string, entry: Entry): Doc {
   const slug = docSlug(base);
+  const parts = slug.split('/');
+  const isIndex = base === 'README' || base.endsWith('/README');
   return {
     base,
     slug,
-    section: slug.split('/')[0] ?? '',
-    isIndex: base === 'README' || base.endsWith('/README'),
+    section: parts[0] ?? '',
+    group: parts.length > (isIndex ? 1 : 2) ? parts[1] : '',
+    isIndex,
     title: titleOf(entry),
     description: entry.data.description ?? '',
     order: entry.data.order,
@@ -72,27 +89,81 @@ export async function getDocsFor(lang: Lang): Promise<Doc[]> {
 
 const byOrder = (a: Doc, b: Doc) => a.order - b.order || a.title.localeCompare(b.title);
 
-/** Sidebar: one group per top-level directory, its README as the heading. */
+const orderOf = (item: NavItem) => ('page' in item ? item.page.order : item.group.order);
+const titleOfItem = (item: NavItem) => ('page' in item ? item.page.title : item.group.title);
+
+/**
+ * Sidebar: one group per top-level directory, its README as the heading. A
+ * subdirectory nests one level under it, placed by its own README's `order`.
+ */
 export function buildNav(docs: Doc[]): NavSection[] {
-  const sections = new Map<string, NavSection>();
+  const sections = new Map<string, NavSection & { groups: Map<string, NavGroup> }>();
   for (const doc of docs) {
     if (!doc.section) continue;
-    const s = sections.get(doc.section) ?? { section: doc.section, title: doc.section, pages: [] };
+    const s = sections.get(doc.section) ?? {
+      section: doc.section,
+      title: doc.section,
+      items: [],
+      groups: new Map(),
+    };
+    sections.set(doc.section, s);
     if (doc.isIndex && doc.slug === doc.section) {
       s.index = doc;
       s.title = doc.title;
+    } else if (doc.group) {
+      const dir = `${doc.section}/${doc.group}`;
+      let g = s.groups.get(dir);
+      if (!g) {
+        g = { dir, title: doc.group, order: Number.MAX_SAFE_INTEGER, pages: [] };
+        s.groups.set(dir, g);
+        s.items.push({ group: g });
+      }
+      if (doc.isIndex) {
+        g.index = doc;
+        g.title = doc.title;
+        g.order = doc.order;
+      } else {
+        g.pages.push(doc);
+      }
     } else {
-      s.pages.push(doc);
+      s.items.push({ page: doc });
     }
-    sections.set(doc.section, s);
   }
   const rank = (name: string) => {
     const i = SECTION_ORDER.indexOf(name);
     return i < 0 ? SECTION_ORDER.length : i;
   };
   return [...sections.values()]
-    .map((s) => ({ ...s, pages: s.pages.sort(byOrder) }))
+    .map(({ groups, ...s }) => {
+      for (const g of groups.values()) g.pages.sort(byOrder);
+      s.items.sort((a, b) => orderOf(a) - orderOf(b) || titleOfItem(a).localeCompare(titleOfItem(b)));
+      return s;
+    })
     .sort((a, b) => rank(a.section) - rank(b.section) || a.section.localeCompare(b.section));
+}
+
+/** Every doc in the sidebar, in sidebar order: each index before its pages. */
+export function flattenNav(nav: NavSection[]): Doc[] {
+  return nav.flatMap((s) => [
+    ...(s.index ? [s.index] : []),
+    ...s.items.flatMap((item) =>
+      'page' in item ? [item.page] : [...(item.group.index ? [item.group.index] : []), ...item.group.pages],
+    ),
+  ]);
+}
+
+/** What an index page lists as cards: a section's items, or a group's pages. */
+export function childrenOf(doc: Doc, nav: NavSection[]): Doc[] {
+  if (!doc.isIndex) return [];
+  const section = nav.find((s) => s.section === doc.section);
+  if (!section) return [];
+  if (doc.slug === section.section) {
+    return section.items.flatMap((item) => ('page' in item ? [item.page] : item.group.index ? [item.group.index] : item.group.pages));
+  }
+  for (const item of section.items) {
+    if ('group' in item && item.group.index?.base === doc.base) return item.group.pages;
+  }
+  return [];
 }
 
 export { docUrl };

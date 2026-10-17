@@ -246,7 +246,7 @@ docs/
   site rewrites them to its own URLs, links out of `docs/` go to the file on
   GitHub, and a link to a file that doesn't exist fails the build.
 - **Short first, detail after.** Each page opens with what a person needs, in a few
-  plain paragraphs. Rules, edge cases and checks follow under `## Details`, which
+  plain paragraphs. Rules, edge cases and checks follow under `## For agents`, which
   the site folds away. Pages that are only reference (the playbook, the incident
   list, common solutions) are detail throughout. There is one version of each
   page, never a short copy and a long copy.

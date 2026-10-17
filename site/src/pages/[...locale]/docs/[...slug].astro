@@ -3,7 +3,7 @@ import { render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import Topbar from '../../../components/Topbar.astro';
 import { loadCatalog } from '../../../lib/data.mjs';
-import { buildNav, docUrl, getDocsFor } from '../../../lib/docs';
+import { buildNav, childrenOf, docUrl, getDocsFor } from '../../../lib/docs';
 import { pathsForLocales } from '../../../i18n/paths.mjs';
 import { getLangFromUrl, localizePath, useTranslations } from '../../../i18n';
 
@@ -26,9 +26,8 @@ const { Content, headings } = await render(doc.entry);
 
 // Right-hand outline: the page's own sections. The h1 is the title.
 const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
-const section = nav.find((s) => s.section === doc.section);
-// A section's index lists its pages, so a README only has to introduce them.
-const children = doc.isIndex && section && doc.slug === section.section ? section.pages : [];
+// An index lists its pages, so a README only has to introduce them.
+const children = childrenOf(doc, nav);
 const href = (base: string) => localizePath(docUrl(base), lang);
 const current = docUrl(doc.base);
 const editUrl = `https://github.com/flatpark/flatpark/edit/main/${doc.file}`;
@@ -51,8 +50,19 @@ const editUrl = `https://github.com/flatpark/flatpark/edit/main/${doc.file}`;
               ? <a href={href(s.index.base)} class:list={['docs-group', current === docUrl(s.index.base) && 'is-current']}>{s.title}</a>
               : <span class="docs-group">{s.title}</span>}
             <ul class="mt-1">
-              {s.pages.map((p) => (
-                <li><a href={href(p.base)} class:list={['docs-link', current === docUrl(p.base) && 'is-current']}>{p.title}</a></li>
+              {s.items.map((item) => 'page' in item ? (
+                <li><a href={href(item.page.base)} class:list={['docs-link', current === docUrl(item.page.base) && 'is-current']}>{item.page.title}</a></li>
+              ) : (
+                <li>
+                  {item.group.index
+                    ? <a href={href(item.group.index.base)} class:list={['docs-link docs-subgroup', current === docUrl(item.group.index.base) && 'is-current']}>{item.group.title}</a>
+                    : <span class="docs-link docs-subgroup">{item.group.title}</span>}
+                  <ul class="docs-sublist">
+                    {item.group.pages.map((p) => (
+                      <li><a href={href(p.base)} class:list={['docs-link', current === docUrl(p.base) && 'is-current']}>{p.title}</a></li>
+                    ))}
+                  </ul>
+                </li>
               ))}
             </ul>
           </div>
@@ -69,8 +79,19 @@ const editUrl = `https://github.com/flatpark/flatpark/edit/main/${doc.file}`;
             <div class="mt-3">
               {s.index ? <a href={href(s.index.base)} class="docs-group">{s.title}</a> : <span class="docs-group">{s.title}</span>}
               <ul class="mt-1">
-                {s.pages.map((p) => (
-                  <li><a href={href(p.base)} class:list={['docs-link', current === docUrl(p.base) && 'is-current']}>{p.title}</a></li>
+                {s.items.map((item) => 'page' in item ? (
+                  <li><a href={href(item.page.base)} class:list={['docs-link', current === docUrl(item.page.base) && 'is-current']}>{item.page.title}</a></li>
+                ) : (
+                  <li>
+                    {item.group.index
+                      ? <a href={href(item.group.index.base)} class:list={['docs-link docs-subgroup', current === docUrl(item.group.index.base) && 'is-current']}>{item.group.title}</a>
+                      : <span class="docs-link docs-subgroup">{item.group.title}</span>}
+                    <ul class="docs-sublist">
+                      {item.group.pages.map((p) => (
+                        <li><a href={href(p.base)} class:list={['docs-link', current === docUrl(p.base) && 'is-current']}>{p.title}</a></li>
+                      ))}
+                    </ul>
+                  </li>
                 ))}
               </ul>
             </div>
@@ -115,7 +136,7 @@ const editUrl = `https://github.com/flatpark/flatpark/edit/main/${doc.file}`;
   </div>
 
   <script>
-    // A heading inside a folded `## Details` block is still in the outline and
+    // A heading inside a folded `## For agents` block is still in the outline and
     // still linkable: open the block when the hash points into it.
     function openTarget() {
       const id = decodeURIComponent(location.hash.slice(1));

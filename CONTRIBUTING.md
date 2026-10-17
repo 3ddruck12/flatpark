@@ -3,7 +3,7 @@
 All documentation lives in [`docs/`](docs/README.md), and the site renders the
 same files at <https://flatpark.org/docs/>.
 
-- Adding an app: [publishing guide](docs/packagers/publishing.md)
+- Adding an app: [submitting an app](docs/packagers/submitting.md)
 - The end-to-end packaging process: [packaging playbook](docs/packagers/playbook.md)
 - How PRs are reviewed: [review runbook](docs/reviewers/review-runbook.md)
 

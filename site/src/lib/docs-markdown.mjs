@@ -8,7 +8,7 @@
 //   - a target that doesn't exist -> the build fails (docsLinkCheck).
 // Root-relative site links (`/setup/`) get the locale prefix in a translation.
 //
-// A `## Details` heading starts the part of a page written for agents and
+// A `## For agents` heading starts the part of a page written for agents and
 // for readers who want everything; it is folded into a <details> block.
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, relative, resolve, sep } from 'node:path';
@@ -101,12 +101,12 @@ export function docsMarkdownPlugin({ docsRoot, repoRoot, repoUrl }) {
       },
       after(root, ctx) {
         const heading = root.children.find(
-          (n) => n.type === 'heading' && n.depth === 2 && ctx.textContent(n).trim() === 'Details',
+          (n) => n.type === 'heading' && n.depth === 2 && ctx.textContent(n).trim() === 'For agents',
         );
         if (!heading) return;
         ctx.replaceNode(heading, {
           type: 'html',
-          value: '<details class="doc-details" data-doc-details><summary>Details</summary>',
+          value: '<details class="doc-details" data-doc-details><summary>For agents</summary>',
         });
         ctx.appendChild(root, { type: 'html', value: '</details>' });
       },

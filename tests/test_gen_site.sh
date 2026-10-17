@@ -182,11 +182,11 @@ assert_file "$docs/project/trust/index.html"
 assert_contains "$docs/project/trust/index.html" "extra-data"
 assert_contains "$index" "/docs/project/policies/"
 assert_contains "$index" "/docs/project/trust/"
-assert_file "$docs/packagers/publishing/index.html"
-assert_contains "$docs/packagers/publishing/index.html" "flatpark.yml"
+assert_file "$docs/packagers/submitting/index.html"
+assert_contains "$docs/packagers/submitting/index.html" "flatpark.yml"
 assert_file "$docs/users/guide/index.html"
 assert_contains "$docs/users/guide/index.html" "remote-add"
-assert_contains "$index" "/docs/packagers/publishing/"
+assert_contains "$index" "/docs/packagers/submitting/"
 assert_contains "$index" "/docs/users/guide/"
 assert_file "$docs/project/conduct/index.html"
 assert_contains "$docs/project/conduct/index.html" "Code of conduct"
@@ -196,7 +196,7 @@ assert_contains "$docs/project/legal/index.html" "no accounts"
 assert_contains "$docs/project/legal/index.html" "without warranty"
 assert_contains "$index" "/docs/project/legal/"
 # Relative .md links become site URLs; links out of docs/ go to GitHub.
-assert_contains "$docs/packagers/playbook/index.html" 'href="/docs/packagers/publishing/"'
+assert_contains "$docs/packagers/playbook/index.html" 'href="/docs/packagers/submitting/"'
 assert_contains "$docs/packagers/playbook/index.html" "github.com/flatpark/flatpark/tree/main/registry/"
 # A section index lists its pages; internal/ and specs/ are never published.
 assert_contains "$docs/packagers/index.html" "docs-cards"
