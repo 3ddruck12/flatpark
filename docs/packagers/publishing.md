@@ -1,36 +1,27 @@
 ---
-description: How to add an app to FlatPark — the descriptor, manifest, and auto-update resolver.
-order: 1
+description: Adding an app step by step — build it, test it locally, open the PR.
+order: 3
 ---
 
 # Publishing guide
 
-Any app with a public download is welcome — FlatPark does not host builds. As
-long as the app ships an official installer or prebuilt archive at a stable,
-public release URL (extra-data style), it can be added here. FlatPark fetches it
-at build, pins it, and signs the result.
+This page walks through adding an app: build it, test it, open the PR. Read
+[what a package is](basics.md) first for the files and how they run, and
+[choosing a format](formats/README.md) for which download to package.
 
-That means a `.deb`, `.rpm`, `.tar.gz`, zip, an official installer script, or an
-AppImage is all upstream needs to provide. AppImages are supported — FlatPark
-unpacks the filesystem appended to the AppImage offline at install time (it is
-never executed and needs no FUSE), using the `appimage-tools` helper from
-[`flatpark/prebuilt`](https://github.com/flatpark/prebuilt);
-[`is.folo.Folo`](https://github.com/flatpark/flatpark/tree/main/registry/is.folo.Folo)
-(Electron) and
-[`org.openshot.OpenShot`](https://github.com/flatpark/flatpark/tree/main/registry/org.openshot.OpenShot)
-(Qt5) are the reference recipes. **Electron and Tauri apps are welcome**, and so
-are **closed-source apps** — the license is not the bar; where the bytes come
-from is. Three packages in the registry are worth reading before you write your
-own:
+Any app with a public download is welcome; FlatPark does not host builds.
+**Electron and Tauri apps are welcome**, and so are **closed-source apps**: the
+license is not the bar; where the bytes come from is. Packages worth reading
+before you write your own:
 
 - **Electron** —
-  [`pro.affine.AFFiNE`](https://github.com/flatpark/flatpark/tree/main/registry/pro.affine.AFFiNE)
+  [`is.folo.Folo`](https://github.com/flatpark/flatpark/tree/main/registry/is.folo.Folo)
   and [`org.electerm.Electerm`](https://github.com/flatpark/flatpark/tree/main/registry/org.electerm.Electerm):
   the Electron base app plus `zypak-wrapper`, so Chromium keeps its internal
   sandbox.
 - **Tauri / WebKitGTK** —
-  [`com.ccswitch.desktop`](https://github.com/flatpark/flatpark/tree/main/registry/com.ccswitch.desktop):
-  the fullest Tauri example. Its wrapper exports
+  [`com.aeroftp.AeroFTP`](https://github.com/flatpark/flatpark/tree/main/registry/com.aeroftp.AeroFTP):
+  a Tauri app with a tray icon. Its wrapper exports
   `WEBKIT_DISABLE_DMABUF_RENDERER=1` (without it WebKitGTK paints a blank
   window under many drivers). If the app uses Tauri's `tray-icon`, it also
   needs the Ayatana appindicator stack: the GNOME runtime does not ship it,
@@ -38,9 +29,7 @@ own:
   and maintain the five-module source recipe in each app.** Use FlatPark's
   audited prebuilt stack from
   [`flatpark/prebuilt`](https://github.com/flatpark/prebuilt), pinning the
-  release archive by SHA-256 as shown below. Its `finish-args` are also a good
-  model for scoping: it grants the individual CLI config paths it manages
-  rather than `--filesystem=home`.
+  release archive by SHA-256 as shown below.
 - **Host-dependent behavior, payload untouched** —
   [`io.enpass.Enpass`](https://github.com/flatpark/flatpark/tree/main/registry/io.enpass.Enpass):
   Enpass validates the browser behind its extension's localhost connection by
@@ -98,7 +87,7 @@ finish-args:
 ```
 
 Copy the current module from an existing manifest such as
-[`com.ccswitch.desktop`](https://github.com/flatpark/flatpark/tree/main/registry/com.ccswitch.desktop),
+[`com.aeroftp.AeroFTP`](https://github.com/flatpark/flatpark/tree/main/registry/com.aeroftp.AeroFTP),
 not an old source-build recipe. The archive is tied to its stated runtime/SDK
 major. When the catalog moves to a new GNOME major, use a prebuilt release made
 for that major rather than silently reusing the old one. If a missing library is
@@ -108,16 +97,10 @@ every app manifest.
 
 ## Add an app
 
-Create one directory under `registry/` named exactly for the app id:
-
-```text
-registry/com.example.App/
-  flatpark.yml             # the descriptor (below)
-  com.example.App.yml      # the Flatpak manifest
-  com.example.App.metainfo.xml
-  com.example.App.svg
-  resolve-update.sh        # optional: upstream update resolver
-```
+Create one directory under `registry/` named exactly for the app id, with the
+files described in [what a package is](basics.md#the-files): the descriptor,
+the manifest, `apply_extra.sh`, a wrapper, the desktop entry, metainfo, icon,
+and a `resolve-update.sh`.
 
 Then validate and build locally. If your machine has no `flatpak-builder`
 package the tooling uses the Flathub build of it, which is the recommended way
@@ -216,124 +199,6 @@ Open a PR. `pr-checks` validates the descriptor, runs the test suite, checks for
 dead links, and builds the changed app — including from a fork, once a maintainer
 approves the workflow run (fork builds get no secrets and are signed with a
 throwaway key). On merge, `publish` builds and publishes it.
-
-## `flatpark.yml` schema
-
-```yaml
-id: com.example.App           # required — must match the directory name
-name: Example App             # required
-summary: One-line description # required
-website: https://example.com/ # optional
-source_url: https://github.com/you/packaging  # optional
-build:
-  manifest: com.example.App.yml  # required — relative to this directory
-  branch: stable              # optional (default: stable)
-  mode: extra-data            # packaging mode (internal label)
-  arches: [x86_64, aarch64]   # optional (default: [x86_64]) — see below
-catalog:                      # optional — drives the catalog page
-  category: Productivity
-  tags:
-    - Example
-    - Demo
-update:                       # optional — enables auto pin-bump PRs
-  command: ./resolve-update.sh
-policy:                       # optional — informational
-  proprietary: true
-  extra_data_first: true
-  dangerous_permissions: []
-```
-
-Only `id`, `name`, `summary`, and `build.manifest` are required.
-
-`build.arches` opts an app into aarch64. Every app ships x86_64; list `aarch64`
-only when upstream publishes an arm build and the manifest pins it — each
-extra-data source carries its own `only-arches`, and the resolver emits one
-source per arch. The simplest shape gives both payloads the same `filename` and
-tags each resolver source with `"arch": "x86_64"` or `"arch": "aarch64"`, so
-`apply_extra` unpacks one name on either arch. The arm build runs
-natively on an arm runner, both in PR checks (with an installable aarch64 bundle)
-and on publish.
-
-## Auto-updating (optional)
-
-Version checking is **always a script** — there are no declarative checker types
-to learn. Point `update.command` at a `resolve-update.sh` that figures out the
-current release however it likes (a JSON/HTML endpoint, the GitHub API, a fixed
-URL, whatever) and prints this JSON to stdout (logs go to stderr):
-
-```json
-{
-  "version": "1.2.3",
-  "releaseDate": "2026-06-19",
-  "sources": [
-    { "filename": "installer.sh", "url": "https://example.com/installer-1.2.3.sh" }
-  ]
-}
-```
-
-The script does **no hashing** — it just resolves the version and the real
-download URL(s). FlatPark downloads each source, computes `sha256`/`size`, and
-rewrites the manifest's managed block (mark it with these comments so FlatPark
-knows what to rewrite):
-
-```yaml
-# BEGIN MANAGED EXTRA-DATA
-- type: extra-data
-  filename: installer.sh
-  only-arches:
-    - x86_64
-  url: https://example.com/installer-1.2.3.sh
-  sha256: <computed by FlatPark>
-  size: <computed by FlatPark>
-# END MANAGED EXTRA-DATA
-```
-
-**Where the version lives:** in the AppStream metainfo `<releases>`, not in
-extra-data (Flatpak has no version field there). The latest `<release version>`
-is the comparison anchor: each day `update-check` runs your resolver, and only
-when its `version` differs from the metainfo does it download, re-pin, prepend a
-new `<release>`, and open a PR. A maintainer merges it, which rebuilds and
-republishes just that app.
-
-### Resolver templates
-
-GitHub releases (pick the right asset):
-
-```sh
-#!/usr/bin/env bash
-set -euo pipefail
-repo="owner/name"
-rel="$(curl -fsSL ${GITHUB_TOKEN:+-H "Authorization: Bearer $GITHUB_TOKEN"} \
-        "https://api.github.com/repos/$repo/releases/latest")"
-version="$(jq -r '.tag_name | ltrimstr("v")' <<<"$rel")"
-url="$(jq -r '.assets[]|select(.name|test("linux.*x86_64.*\\.tar\\.gz$")).browser_download_url' <<<"$rel")"
-date="$(jq -r '.published_at' <<<"$rel" | cut -c1-10)"
-jq -n --arg v "$version" --arg d "$date" --arg u "$url" \
-  '{version:$v,releaseDate:$d,sources:[{filename:"app.tar.gz",url:$u}]}'
-```
-
-A vendor JSON endpoint (version in one field, URL in another):
-
-```sh
-#!/usr/bin/env bash
-set -euo pipefail
-meta="$(curl -fsSL https://vendor.example/latest.json)"
-version="$(jq -r '.version' <<<"$meta")"
-url="$(jq -r '.assets[]|select(.name|test("linux-x86_64\\.deb$")).url' <<<"$meta")"
-date="$(jq -r '.published_at // ""' <<<"$meta" | cut -c1-10)"
-jq -n --arg v "$version" --arg d "$date" --arg u "$url" \
-  '{version:$v,releaseDate:$d,sources:[{filename:"app.deb",url:$u}]}'
-```
-
-A fixed URL that simply embeds the version:
-
-```sh
-#!/usr/bin/env bash
-set -euo pipefail
-version="$(curl -fsSL https://vendor.example/latest.txt)"
-jq -n --arg v "$version" \
-  '{version:$v,sources:[{filename:"app.bin",url:("https://vendor.example/app-"+$v+".bin")}]}'
-```
 
 ## Sandbox & permissions
 

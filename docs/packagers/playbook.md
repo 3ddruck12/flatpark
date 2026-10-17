@@ -1,6 +1,6 @@
 ---
 description: The end-to-end process every packaging run follows, from candidate to listed app.
-order: 2
+order: 4
 ---
 
 # Packaging playbook
@@ -10,8 +10,11 @@ tested, listed, and upstream informed."* **Every packaging run follows this.** I
 together the pieces that already have their own docs and adds the parts that don't:
 
 - **Discovery detail** (crawl queries, gates) → [`discovery-pipeline.md`](../internal/discovery-pipeline.md)
-- **Descriptor / manifest schema, local build & test, auto-update resolver** →
-  [publishing guide](publishing.md)
+- **The files, what runs when, descriptor schema, auto-update resolver** →
+  [what a package is](basics.md)
+- **Which download to package, and how to unpack each format** →
+  [choosing a format](formats/README.md)
+- **Local build & test, submitting** → [publishing guide](publishing.md)
 - **The review bar a PR is graded against** → [review runbook](../reviewers/review-runbook.md)
 
 This file is the **spine**; those are the deep dives. Where they conflict, **this file wins**
@@ -122,7 +125,7 @@ official installer is what qualifies an app.
 
 ## 3. Package
 
-Detail + schema in the [contributing guide](publishing.md). The shape:
+Detail + schema in [what a package is](basics.md). The shape:
 
 - **Inspect the artifact.** Extract (`bsdtar` for `.deb`/zip, `tar` for tarball), check
   `readelf -d` NEEDED against the runtime's coverage, locate the icon / `.desktop` / metainfo,
@@ -190,7 +193,7 @@ Detail + schema in the [contributing guide](publishing.md). The shape:
   - **Electron** → `base: org.electronjs.Electron2.BaseApp//<ver>`, run via `zypak-wrapper`
     so Chromium keeps its **internal sandbox through Zypak's default entrypoint** (do **not**
     reach for `--no-sandbox`), plus `--unset-env=ELECTRON_RUN_AS_NODE`. Template:
-    [`registry/pro.affine.AFFiNE`](../../registry/pro.affine.AFFiNE),
+    [`registry/is.folo.Folo`](../../registry/is.folo.Folo),
     [`registry/org.electerm.Electerm`](../../registry/org.electerm.Electerm).
   - **Tauri / WebKitGTK** → `WEBKIT_DISABLE_DMABUF_RENDERER=1` in the wrapper (else blank
     window). **Check the app's `tauri.conf.json` for `transparent: true` first, because then
@@ -208,7 +211,7 @@ Detail + schema in the [contributing guide](publishing.md). The shape:
     it. **Do not duplicate the five-module Ayatana source build in each app.** Consume the
     pinned `ayatana-stack` archive from [`flatpark/prebuilt`](https://github.com/flatpark/prebuilt)
     as a normal module before the app module; copy the current URL and SHA-256 from
-    [`registry/com.ccswitch.desktop`](../../registry/com.ccswitch.desktop). The archive is built
+    [`registry/com.aeroftp.AeroFTP`](../../registry/com.aeroftp.AeroFTP). The archive is built
     against a specific GNOME SDK major, so migrate it explicitly when the catalog runtime
     major changes. Add `--filesystem=xdg-run/tray-icon:create` only when the app actually
     exposes a tray icon. If another missing open-source support stack is shared by multiple
@@ -224,27 +227,11 @@ Detail + schema in the [contributing guide](publishing.md). The shape:
   - **Bundled JRE** (Java desktop apps) → [`registry/com.interactivebrokers.ibkrdesktop`](../../registry/com.interactivebrokers.ibkrdesktop),
     which fetches a Zulu JRE tarball as a second extra-data source and stages it at
     `/app/extra/jre` for the wrapper to exec.
-  - **AppImage** → the `.AppImage` is the app's extra-data payload; add
-    [`flatpark/prebuilt`](https://github.com/flatpark/prebuilt)'s **`appimage-tools`**
-    release as a **second extra-data source** (copy the current URL + SHA-256 from
-    [`registry/is.folo.Folo`](../../registry/is.folo.Folo)). Never runs, never needs libfuse.
-    In `apply_extra`, unpack `appimage-tools` with `bsdtar`, then crack the SquashFS
-    appended to the stub:
-    ```sh
-    off=$(appimage-tools/bin/appimage-offset app.AppImage)
-    appimage-tools/bin/unsquashfs -o "$off" -d app app.AppImage
-    ```
-    Wrap the AppDir's own launcher — read its name out of the bundled `.desktop` `Exec=`
-    (electron-builder names it after `productName`), symlink a stable one, don't hardcode.
-    `unsquashfs` here handles gzip/xz/lz4/zstd but **not LZO** (needs a lib the runtime
-    lacks; almost no AppImage uses it). Recipes: Electron AppImage →
-    [`registry/is.folo.Folo`](../../registry/is.folo.Folo) (`base:
-    org.electronjs.Electron2.BaseApp` + zypak); Qt5 AppImage →
-    [`registry/org.openshot.OpenShot`](../../registry/org.openshot.OpenShot) — bundled Qt5
-    wayland plugins often omit `libQt5WaylandClient.so.5`, so pin `QT_QPA_PLATFORM=xcb`
-    + `--socket=x11` and unset `QT_QPA_PLATFORM`. `--persist=<dotdir>` is silently
-    ignored when `--filesystem=home`/`host` is also granted — grant only `xdg-*` subdirs
-    so `$HOME` stays the per-app dir.
+  - **AppImage** → unpacked offline with `appimage-tools` from
+    [`flatpark/prebuilt`](https://github.com/flatpark/prebuilt) as a second extra-data
+    source; never run, no libfuse. Recipe, launcher rules and sandbox notes:
+    [AppImages](formats/appimage.md). Qt apps with their own Qt are the case for it:
+    [choosing a format](formats/README.md#the-qt-exception).
   - Version-stamped top dir → rename to a stable path in `apply_extra`.
   - **Don't hardcode a name the payload owns.** Pin refreshes are automated, so any
     name upstream can change between releases — above all the launcher binary — must be

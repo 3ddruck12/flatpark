@@ -17,8 +17,9 @@ the details below it. The same files are rendered at
 ## For agents
 
 - Packaging an app: start with the [packaging playbook](packagers/playbook.md),
-  then the [publishing guide](packagers/publishing.md) for the descriptor,
-  manifest and resolver.
+  then [what a package is](packagers/basics.md) for the files and how they run,
+  [choosing a format](packagers/formats/README.md) for the payload, and the
+  [publishing guide](packagers/publishing.md) to build, test and submit.
 - Reviewing a PR: follow the [review runbook](reviewers/review-runbook.md).
 - Link between pages with relative `.md` paths. The site rewrites them, and the
   build fails on a link to a page that doesn't exist.
