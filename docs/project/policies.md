@@ -1,6 +1,6 @@
 ---
 description: What FlatPark accepts, the review bar, and the de-listing process.
-order: 2
+order: 3
 ---
 
 # Listing policies

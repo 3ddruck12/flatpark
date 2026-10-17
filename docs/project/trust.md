@@ -1,6 +1,6 @@
 ---
 description: How FlatPark repackages, pins, signs, and sandboxes the apps it hosts.
-order: 3
+order: 4
 ---
 
 # Trust & safety
@@ -29,11 +29,15 @@ exactly what it is and why.
 
 ## Pinned and signed
 
-Each release is pinned by `sha256` and size in the manifest, so a build cannot
-silently swap the binary. Because the pin names an exact checksum, a vendor
-quietly changing the file behind a URL does **not** flow through to you — the
-build fails instead. New upstream releases are picked up by a daily check that
-opens a pull request to re-pin, which a maintainer reviews and merges.
+Each release is pinned by `sha256` and size in the manifest, and your Flatpak
+client checks both when it downloads the file. If a vendor quietly changes the
+file behind a URL, the change does **not** reach you: the install or update
+fails until the new file has been checked and pinned.
+
+New releases are found twice a day, or within minutes when the developer's
+release workflow notifies FlatPark. Each one is downloaded, pinned and unpacked
+the way an install would unpack it; only when that works is it merged and
+published, automatically. Every update is a public commit in the repository.
 
 The published repo is **GPG-signed**, and your client verifies that signature on
 install and update.
