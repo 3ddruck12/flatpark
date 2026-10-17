@@ -60,7 +60,7 @@ The one thing a package may build in is a shared support library from
 [`flatpark/prebuilt`](prebuilt.md). Everything else
 the app needs and the runtime lacks is a second extra-data download.
 
-## Details
+## For agents
 
 ### `flatpark.yml`
 

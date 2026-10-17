@@ -27,7 +27,7 @@ Start from one of these:
 - [Audionaut](../../../registry/app.audionaut.Audionaut/apply_extra.sh): on the
   freedesktop runtime.
 
-## Details
+## For agents
 
 ### `apply_extra.sh`
 

@@ -19,7 +19,7 @@ Start from one of these:
   with the Electron base app.
 - [Impasto](../../../registry/com.github.zbcoding.Impasto/apply_extra.sh): a zip.
 
-## Details
+## For agents
 
 ### `apply_extra.sh`
 

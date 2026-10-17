@@ -30,7 +30,7 @@ Start from one of these:
 - [AlterSend](../../../registry/com.altersend.AlterSend/apply_extra.sh): an
   Electron app with the Electron base app and zypak.
 
-## Details
+## For agents
 
 ### The manifest
 
@@ -131,7 +131,7 @@ also has, and a global path makes every child process load them too.
 - **Qt platform plugins.** A bundled Qt often has only `xcb`, or the Wayland
   plugin without `libQt5WaylandClient`. Then: `--socket=x11`,
   `--unset-env=QT_QPA_PLATFORM`, and `QT_QPA_PLATFORM="${QT_QPA_PLATFORM:-xcb}"`
-  in the wrapper. Details in [choosing a format](README.md#things-to-check-in-a-self-contained-appimage).
+  in the wrapper. More in [choosing a format](README.md#things-to-check-in-a-self-contained-appimage).
 - **A bundled Qt may have no portal platform theme,** so file dialogs
   are Qt's own and only see what the sandbox grants. Grant the directories the
   app saves to by default (`xdg-pictures`, `xdg-documents`), not `home`.

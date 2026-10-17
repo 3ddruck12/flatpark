@@ -22,7 +22,7 @@ description, so each user decides. Permissions show on every app's page.
 - **The developer decides for their own app.** When upstream says how they want
   the package to behave, we follow it, and declare what it needs.
 
-## Details
+## For agents
 
 ### Optional capabilities as overrides
 

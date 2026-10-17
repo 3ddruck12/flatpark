@@ -66,7 +66,7 @@ Never compile a dependency inside an app's own manifest. Its bytes would land in
 FlatPark's repository for that one app, and every package needing it would keep
 its own copy of the recipe.
 
-## Details
+## For agents
 
 ### Archive module or extra-data
 

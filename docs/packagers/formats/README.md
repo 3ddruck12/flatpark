@@ -36,7 +36,7 @@ The reference package is
 [Mark Shot](../../../registry/io.github.jswysnemc.MarkShot/io.github.jswysnemc.MarkShot.yml)
 (Qt 6); its manifest explains each choice.
 
-## Details
+## For agents
 
 ### Choosing the runtime
 

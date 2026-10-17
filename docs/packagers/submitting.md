@@ -83,7 +83,7 @@ Check at least:
 If you are the app's developer, say so in the PR; it is how the developer-approved
 shield gets added ([upstream approvals](../reference/upstream-approvals.md)).
 
-## Details
+## For agents
 
 ### Building without the Flathub builder
 

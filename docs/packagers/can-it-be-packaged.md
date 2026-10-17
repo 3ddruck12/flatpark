@@ -41,7 +41,7 @@ what it does, not by whether someone calls it AI-made
   differs from the Flathub one. If the reason goes away, the overlap is
   reviewed again.
 
-## Details
+## For agents
 
 ### Checking
 
