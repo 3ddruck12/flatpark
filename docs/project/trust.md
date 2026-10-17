@@ -48,7 +48,7 @@ reach before installing it.
 Capabilities an app doesn't strictly need are **left off by default**. Where an
 app can do more with a broader permission, its page documents the `flatpak
 override` command that grants it, so the choice stays yours — see the
-[user guide](../users/guide.md).
+[flatpak override](../users/override.md).
 
 <span id="packaging"></span>
 
@@ -87,5 +87,5 @@ check provenance yourself.
 
 - Read the **permissions** panel on the app's page.
 - Follow the **Source** and **Website** links to upstream.
-- Install via the signed remote (see the [user guide](../users/guide.md)); your client
+- Install via the signed remote (see [setting up](../users/setup.md)); your client
   checks the signature for you.

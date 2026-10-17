@@ -1,3 +1,4 @@
 # Users
 
-Installing FlatPark apps, keeping them updated, and what to expect from them.
+Setting up FlatPark, installing and updating apps, what their permissions mean,
+cleaning up, and what to do when something doesn't work.

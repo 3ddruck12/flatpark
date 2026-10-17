@@ -25,7 +25,7 @@ FlatPark 会在安装时下载**厂商自己的发布产物**，并将其封装�
 
 FlatPark 倾向使用仍能让应用正常工作的最少 `finish-args`，并避免 `--filesystem=home` 这类范围宽泛的授权。每个应用页面都会列出其确切权限，并附有通俗易懂的风险标签，让你能在安装前了解应用可以访问哪些内容。
 
-应用并非绝对需要的功能**默认保持关闭**。如果应用获得更宽泛的权限后可以使用更多功能，其页面会记录用于授权的 `flatpak override` 命令，让选择权留在你手中——请参阅[用户指南](../users/guide.md)。
+应用并非绝对需要的功能**默认保持关闭**。如果应用获得更宽泛的权限后可以使用更多功能，其页面会记录用于授权的 `flatpak override` 命令，让选择权留在你手中——请参阅[flatpak override](../users/override.md)。
 
 <span id="packaging"></span>
 
@@ -48,4 +48,4 @@ FlatPark 是独立项目，**与其打包的应用没有关联**。应用在此�
 
 - 查看应用页面上的**权限**面板。
 - 通过 **Source** 和 **Website** 链接前往 upstream。
-- 通过已签名的 remote 安装（请参阅[用户指南](../users/guide.md)）；客户端会自动验证签名。
+- 通过已签名的 remote 安装（请参阅[配置 FlatPark](../users/setup.md)）；客户端会自动验证签名。
