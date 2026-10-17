@@ -19,7 +19,16 @@ the details below it. The same files are rendered at
 
 - Packaging an app: follow the [packaging playbook](packagers/playbook.md); each
   step links to the page that holds its rules.
+- Finding apps to package: [finding apps](packagers/finding-apps.md).
+- Something doesn't work in the sandbox: [common problems](packagers/solutions/README.md),
+  and the checklist for the app's stack in [by stack](packagers/solutions/by-stack.md).
+- Testing a package or a change to one: the [testing playbook](reviewers/testing-playbook.md);
+  for a runtime upgrade or a prebuilt re-cut, [batch changes](reviewers/batch-changes.md).
 - Reviewing a PR: follow the [review runbook](reviewers/review-runbook.md).
+- A fix for a listed app: add a row to the [incident list](reference/incidents.md).
+- After a run: [cleaning up](packagers/cleanup.md).
+- How decisions are made: [principles](project/principles.md) and
+  [governance](project/governance.md).
 - Link between pages with relative `.md` paths. The site rewrites them, and the
   build fails on a link to a page that doesn't exist.
 - `specs/` holds the plans being worked through, one step at a time, and

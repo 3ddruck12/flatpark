@@ -247,6 +247,17 @@ what the updater compares against. A new package starts with one `<release>`
 for the version it pins. The description is shown on the app's page, so it is
 also where opt-in `flatpak override` commands and any disclosed change go.
 
+The rest of the metainfo:
+
+- **Say it is a community package**: it repackages the official upstream build
+  unmodified. A closed-source package that injects code says what it injects
+  instead of "unmodified".
+- **`project_license`** is the app's real licence; for closed source,
+  `LicenseRef-proprietary=<URL of the vendor's terms>`.
+- **Screenshots** are `<image>` URLs pointing at upstream, never files in the
+  package. The site downloads them at build time and serves them as WebP,
+  falling back to the upstream URL if the download fails.
+
 ### `resolve-update.sh`
 
 Prints the latest release as JSON on stdout (logs go to stderr), and nothing
