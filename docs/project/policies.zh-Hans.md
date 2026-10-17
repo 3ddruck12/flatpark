@@ -1,6 +1,6 @@
 ---
 description: FlatPark 接受哪些应用、审核标准以及下架流程。
-order: 2
+order: 3
 ---
 
 # 收录政策

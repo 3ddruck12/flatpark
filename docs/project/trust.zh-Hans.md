@@ -1,6 +1,6 @@
 ---
 description: FlatPark 如何重新打包、固定、签名并以 sandbox 运行其收录的应用。
-order: 3
+order: 4
 ---
 
 # 信任与安全

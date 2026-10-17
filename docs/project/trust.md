@@ -1,6 +1,6 @@
 ---
 description: How FlatPark repackages, pins, signs, and sandboxes the apps it hosts.
-order: 3
+order: 4
 ---
 
 # Trust & safety

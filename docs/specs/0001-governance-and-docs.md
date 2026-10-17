@@ -34,9 +34,11 @@ weighed against it.
    tested because it needs an account, a login or hardware we don't have, the app
    isn't listed until someone has tested it. The PR stays open, its build goes to
    the test remote, and a tester or upstream confirms it.
-7. **Human review where it's about trust, not bugs:** packages at level Modified or
-   Reduced isolation, infrastructure, principles, new repositories, and anything
-   that touches the security floor. Two reviewers there.
+7. **One maintainer for day-to-day work, two only for the rules.** Listings,
+   package changes, batch changes and removals need a playbook record and one
+   maintainer; principles, the security floor, signing and infrastructure need a
+   second maintainer once there is one. (Simplified 2026-10-17 from a per-case
+   table with reviewers and testers; see [governance](../project/governance.md).)
 8. **Documentation is the main work.** One library in the repo's `docs/`, written
    in enough detail that an AI agent can package and review apps from it, and
    rendered on the site so people read the same files. What people read stays short
@@ -130,21 +132,12 @@ It ships in its own PR.
 
 ## Who signs off on what
 
-| Change | Sign-off |
-|---|---|
-| Version or pin bump that passes the mechanical gate | CI only (auto-merge) |
-| Upstream self-merge within the safe surface | CI only |
-| New listing; change to a listed package | Packager runs the playbook; CI |
-| New listing whose core feature we can't test | Plus a tester or upstream, via `flatpark-test` |
-| Batch change (runtime, prebuilt stack, shared wrapper) | Playbook on every app + one feature test per stack |
-| Package at level Modified or Reduced isolation | 2 reviewers |
-| De-listing for one of the listed reasons | 1 reviewer |
-| Principles, infrastructure, security floor, new repository | 2 reviewers |
-
-While there is no other active reviewer, the owner's sign-off counts as two. As
-soon as one other reviewer is active, two-reviewer changes need them too. A
-release found to steal data or damage systems is pulled at once by anyone with
-merge rights, with a public write-up within 7 days.
+Settled in [governance](../project/governance.md): three roles (maintainers,
+contributors, developers of listed apps), CI alone for upstream version bumps,
+one maintainer with a playbook record for everything else, and a second
+maintainer only for principles, the security floor, signing and
+infrastructure. A dangerous release is pulled at once by any maintainer, with a
+public write-up within 7 days.
 
 ## What stays from the RFC draft
 
@@ -155,8 +148,7 @@ These parts of the first draft stand, and move into the docs as they are written
   disclosed; every package declares its packaging level and CI checks it; least
   privilege by default; upstream has the final word on its own app; judge the
   package, not how it was written; one runtime major; decisions in public.
-- **Roles:** owner, reviewer, tester, upstream maintainer, packager. Reviewers
-  matter for the trust decisions above; testers for hard constraints.
+- **Roles:** replaced by the three in [governance](../project/governance.md).
 - **Upstream lanes (#473):** self-merge for pins on the same host, metainfo and
   narrowing `finish-args`; anything else is an upstream request with a
   security-only check.
@@ -238,7 +230,7 @@ docs/
 |---|---|---|
 | 1 | This spec | this PR |
 | 2 | `/docs/` on the site: collection from `docs/`, sidebar, link rewriting, redirects, `llms-full.txt`; existing pages and docs moved in | this PR |
-| 3 | Docs content: per-audience pages, testing playbook, incident list, common solutions; governance and security pages | ongoing: packagers, users, common problems, testing done; developers, governance, security to do |
+| 3 | Docs content: per-audience pages, testing playbook, incident list, common solutions; governance and security pages | packagers, users, developers, testing, principles, governance and security done; the listing lifecycle (listing, testing, inviting upstream, removal) to do |
 | 4 | `flatpark-test` remote | own PR |
 | 5 | News with RSS/Atom | own PR |
 | 6 | Renames and removals via end-of-life (AeroFTP first) | own PR |
