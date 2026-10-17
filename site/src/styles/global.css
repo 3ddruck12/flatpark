@@ -240,7 +240,7 @@ body {
 .prose td { @apply border-b border-line px-3 py-2 align-top; }
 .prose :is(h2, h3, h4) { scroll-margin-top: calc(var(--topbar-h) + 1rem); }
 
-/* Docs library: sidebar links, section cards, and the folded `## Details`. */
+/* Docs library: sidebar links, section cards, and the folded `## For agents`. */
 .docs-group { @apply block rounded-md px-2 py-1 text-xs font-bold uppercase tracking-wide text-muted; }
 a.docs-group:hover { @apply text-brand; }
 .docs-link { @apply block rounded-md px-2 py-1 text-ink/75 hover:bg-canvas hover:text-ink; }
