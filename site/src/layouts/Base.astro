@@ -30,6 +30,7 @@ const xDefault = Astro.site ? new URL(localizePath(basePath, defaultLang), Astro
 // The search ones keep their `{n}` / `{q}` placeholders: only the client knows
 // what to put there, since the numbers exist only once a query has been typed.
 const clientStrings = {
+  copy: t('action.copy'),
   copied: t('action.copied'),
   copiedInstall: t('action.copied_install'),
   copyFailed: t('action.copy_failed'),
@@ -113,6 +114,7 @@ const searchMeta = {
       // missing blob degrades to the pre-i18n behaviour instead of blanking.
       const S = (() => {
         const defaults = {
+          copy: 'Copy',
           copied: 'Copied',
           copiedInstall: 'Copied!',
           copyFailed: 'Copy failed',
@@ -335,6 +337,21 @@ const searchMeta = {
             car.addEventListener('focusin', () => clearInterval(timer), { once: true });
           }
         }
+      }
+
+      // Docs code blocks get a copy button: wrap each <pre> so the button sits
+      // in its corner without scrolling away with long lines.
+      for (const pre of document.querySelectorAll<HTMLElement>('.prose pre')) {
+        const wrap = document.createElement('div');
+        wrap.className = 'code-block';
+        pre.replaceWith(wrap);
+        wrap.append(pre);
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'code-copy';
+        button.textContent = S.copy;
+        button.dataset.copy = (pre.textContent || '').replace(/\n$/, '');
+        wrap.append(button);
       }
 
       for (const button of document.querySelectorAll('[data-copy]')) {

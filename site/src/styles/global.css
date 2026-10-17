@@ -232,6 +232,9 @@ body {
 .prose code { @apply rounded bg-canvas px-1.5 py-0.5 font-mono text-sm; }
 .prose pre { @apply mt-4 overflow-x-auto rounded-lg border border-line bg-[#1d1f24] p-4 text-sm text-[#e9eaed]; }
 .prose pre code { @apply bg-transparent p-0; }
+.prose .code-block { @apply relative; }
+.prose .code-block pre { @apply pr-16; }
+.code-copy { @apply absolute top-2 right-2 rounded-md border border-white/15 bg-white/10 px-2 py-1 text-xs text-[#e9eaed] opacity-70 transition hover:opacity-100 focus-visible:opacity-100; }
 .prose h4 { @apply mt-5 font-bold text-ink; }
 .prose blockquote { @apply mt-4 border-l-4 border-line pl-4 text-ink/75; }
 .prose hr { @apply my-8 border-line; }
