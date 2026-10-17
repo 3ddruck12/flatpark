@@ -1,5 +1,5 @@
-// Each published doc's Markdown source, next to its page: `/docs/users/guide.md`
-// beside `/docs/users/guide/`. The path is the file's own path under `docs/`,
+// Each published doc's Markdown source, next to its page: `/docs/users/setup.md`
+// beside `/docs/users/setup/`. The path is the file's own path under `docs/`,
 // so the relative `.md` links inside it resolve to these files too. English
 // and translations alike; an agent fetching the site gets what the repo has.
 import { getCollection } from 'astro:content';

@@ -355,24 +355,6 @@ const searchMeta = {
 
       apply();
 
-      // Scope tabs (setup page; no-ops elsewhere): switch which command panel
-      // shows. Tabs carry data-tab, panels carry the matching data-panel.
-      for (const tabs of document.querySelectorAll('[data-tabs]')) {
-        const buttons = Array.from(tabs.querySelectorAll('[data-tab]'));
-        const panels = Array.from(tabs.querySelectorAll('[data-panel]'));
-        for (const button of buttons) {
-          button.addEventListener('click', () => {
-            const id = button.dataset.tab;
-            for (const b of buttons) {
-              const on = b === button;
-              b.classList.toggle('is-active', on);
-              b.setAttribute('aria-selected', String(on));
-            }
-            for (const p of panels) p.hidden = p.dataset.panel !== id;
-          });
-        }
-      }
-
       // Screenshot carousel: one slide at a time, dots below to switch. Drop any
       // slide whose hotlinked image fails so the page never shows a broken icon.
       for (const carousel of document.querySelectorAll<HTMLElement>('[data-carousel]')) {
