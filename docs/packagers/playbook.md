@@ -53,8 +53,7 @@ PR and any upstream message use it.
 Write the files in [what a package is](basics.md) for the download chosen in
 [choosing a format](formats/README.md); libraries the runtime lacks come from
 [prebuilt](prebuilt.md); grants follow [permissions](permissions.md); known
-problems are in [common problems](solutions/README.md). What has no page of its
-own yet:
+problems are in [common problems](solutions/README.md). In particular:
 
 - **Pick the runtime** from [choosing a format](formats/README.md#choosing-the-runtime):
   always the version the rest of the catalog is on, never an older one to dodge a
@@ -62,13 +61,7 @@ own yet:
   [batch change](../reviewers/batch-changes.md).
 - **Stack recipes and known problems** → [common problems](solutions/README.md),
   and the checklist for the app's stack in [by stack](solutions/by-stack.md).
-- **metainfo:** mark it a **community package** ("repackages the official upstream build
-  unmodified"; a proprietary package that injects code says what it injects instead of
-  "unmodified"), honest `project_license`, screenshot `<image>` URLs pointing **at upstream**
-  (never upload to R2). The site's `enrich` step downloads those and serves recompressed webp
-  from Pages — a CDN win, and it drops the upstream fetch from page load — falling back to the
-  upstream hotlink only if the fetch fails.
-
+- **metainfo** → [what a package is](basics.md#the-metainfo-and-the-version).
 
 ## 4. Test / verify — every run, no exceptions
 
