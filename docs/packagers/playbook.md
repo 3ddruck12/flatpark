@@ -1,6 +1,6 @@
 ---
 description: The end-to-end process every packaging run follows, from candidate to listed app.
-order: 4
+order: 5
 ---
 
 # Packaging playbook

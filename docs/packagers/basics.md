@@ -57,7 +57,7 @@ hosts its bytes. Three reasons:
   not a rebuild, so it ships minutes after upstream's release.
 
 The one thing a package may build in is a shared support library from
-[`flatpark/prebuilt`](https://github.com/flatpark/prebuilt). Everything else
+[`flatpark/prebuilt`](prebuilt.md). Everything else
 the app needs and the runtime lacks is a second extra-data download.
 
 ## Details
@@ -348,10 +348,9 @@ What follows from extra-data, and what to do instead:
   here pins that release as extra-data like any vendor download
   ([`com.ayugram.desktop`](../../registry/com.ayugram.desktop/com.ayugram.desktop.yml)
   pins `flatpark/ayugram-release`). That needs the owner's agreement first.
-- **A library or tool the runtime lacks:** if several apps need it, it belongs
-  in `flatpark/prebuilt`; if one app needs it, pin it as a second extra-data
-  download (a Debian package, an upstream tarball). Don't compile it into
-  `/app`.
+- **A library or tool the runtime lacks:** a second extra-data download (an
+  upstream binary, a Debian package) or a [prebuilt stack](prebuilt.md#when-to-use-one).
+  Don't compile it into `/app`.
 - **The download must be a stable public URL with fixed bytes.** A URL that
   always serves "the latest" changes under the pin and fails installs until it
   is re-pinned; resolve it to a versioned URL. A CDN that serves different bytes

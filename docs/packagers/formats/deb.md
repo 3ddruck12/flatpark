@@ -98,7 +98,7 @@ A Qt `.deb` linked against the system Qt is the case that usually fails; see
 When the app shells out to a command neither the runtime nor its own package
 ships (a clipboard helper, Ghostscript, `sshpass`), look in this order:
 upstream's own Linux binary, then a Debian package pinned as extra-data, then
-a shared stack in `flatpark/prebuilt` if several apps need it.
+a [prebuilt stack](../prebuilt.md).
 
 A Debian pin goes in its own managed block, which `debian-pins.yml` re-resolves
 from the suite's package index:

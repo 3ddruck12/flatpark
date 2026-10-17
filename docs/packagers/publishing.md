@@ -1,6 +1,6 @@
 ---
 description: Adding an app step by step — build it, test it locally, open the PR.
-order: 3
+order: 4
 ---
 
 # Publishing guide
@@ -27,9 +27,8 @@ before you write your own:
   needs the Ayatana appindicator stack: the GNOME runtime does not ship it,
   and `tray-icon` `dlopen`s it and can panic when it is absent. **Do not copy
   and maintain the five-module source recipe in each app.** Use FlatPark's
-  audited prebuilt stack from
-  [`flatpark/prebuilt`](https://github.com/flatpark/prebuilt), pinning the
-  release archive by SHA-256 as shown below.
+  `ayatana-stack` from [prebuilt](prebuilt.md#the-stacks) as an archive
+  module, copied from AeroFTP's manifest.
 - **Host-dependent behavior, payload untouched** —
   [`io.enpass.Enpass`](https://github.com/flatpark/flatpark/tree/main/registry/io.enpass.Enpass):
   Enpass validates the browser behind its extension's localhost connection by
@@ -45,55 +44,13 @@ before you write your own:
   declares it under `policy.dangerous_permissions` and argues for it — expect
   that level of scrutiny if you go this route.
 
-## Reusing FlatPark prebuilt support libraries
+## Libraries the runtime lacks
 
-FlatPark keeps reusable, redistributable support libraries in
-[`flatpark/prebuilt`](https://github.com/flatpark/prebuilt). These archives are
-built by GitHub Actions from manifests that pin every source and patch, and each
-consuming app pins the resulting archive by SHA-256. This avoids compiling and
-maintaining the same dependency stack independently in many app directories.
-The prebuilt repository is only for open-source supporting libraries; proprietary
-app payloads must continue to use `extra-data` from the vendor's official URL.
-
-**A shared `flatpark/prebuilt` stack is the _only_ thing a package may pull in as a
-`type: archive` (or `git`) module.** Those bytes are baked into the Flatpak ref and
-served from FlatPark's own object storage. The app payload, and any dependency that
-matters to just one app, must be `extra-data` — fetched from the vendor or a release
-URL at install time so it never lands in the ref. Don't source-build a single app's
-missing library into `/app`: if it's shared by several apps, add one reproducible
-release to `flatpark/prebuilt`; otherwise ship it as a second `extra-data` source
-(a pinned distro `.deb`, an upstream tarball, …).
-
-For a Tauri application that uses `tray-icon` on `org.gnome.Platform//51`, add
-the current Ayatana stack as a normal archive module before the app module:
-
-```yaml
-modules:
-  - name: ayatana-stack
-    buildsystem: simple
-    build-commands:
-      - cp -a ./. /app/
-    sources:
-      - type: archive
-        url: https://github.com/flatpark/prebuilt/releases/download/ayatana-v2/ayatana-stack-ayatana-v2-gnome-51-x86_64.tar.xz
-        sha256: 1051a537f22d335eb79557b8c5a610a12c326712dac74032de8e76e78b876fdc
-```
-
-Also grant the tray socket when the app actually exposes a tray icon:
-
-```yaml
-finish-args:
-  - --filesystem=xdg-run/tray-icon:create
-```
-
-Copy the current module from an existing manifest such as
-[`com.aeroftp.AeroFTP`](https://github.com/flatpark/flatpark/tree/main/registry/com.aeroftp.AeroFTP),
-not an old source-build recipe. The archive is tied to its stated runtime/SDK
-major. When the catalog moves to a new GNOME major, use a prebuilt release made
-for that major rather than silently reusing the old one. If a missing library is
-not yet available from `flatpark/prebuilt`, first check whether it is shared by
-multiple apps; prefer adding one reproducible stack there over duplicating it in
-every app manifest.
+Shared support libraries (the Ayatana tray stack for Tauri apps, mpv, ffmpeg,
+database clients, the AppImage tools) come from
+[`flatpark/prebuilt`](https://github.com/flatpark/prebuilt). See
+[prebuilt stacks](prebuilt.md) for the list, how to pin one, and when to add a
+new one. Never compile a dependency inside an app's manifest.
 
 ## Add an app
 
