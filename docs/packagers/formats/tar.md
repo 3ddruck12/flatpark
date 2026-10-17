@@ -104,5 +104,5 @@ the app starts.
 ./scripts/publish.sh --verify <app-id>      # builds and installs it
 ```
 
-Then run the app and use its core feature; see the
-[publishing guide](../publishing.md#test-without-polluting-your-everyday-flatpak).
+Then run the app and use its core feature; see
+[submitting an app](../submitting.md#test).

@@ -1,6 +1,6 @@
 ---
 description: Which of upstream's downloads to package, and which runtime goes with it.
-order: 2
+order: 3
 ---
 
 # Choosing a format

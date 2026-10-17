@@ -1,6 +1,6 @@
 ---
 description: What a FlatPark package is made of, what runs when, and why the app itself is never in it.
-order: 1
+order: 2
 ---
 
 # What a package is
@@ -98,12 +98,8 @@ packaging:                    # anything beyond a plain launch
   `apply_extra.sh` unpacks one name on either arch.
 - `catalog.upstream_approved` is the blue shield. CI fails it without a matching
   row in [upstream approvals](../reference/upstream-approvals.md).
-- `packaging` declares the [packaging level](../project/trust.md#packaging-changes).
-  The kinds are `support-files`, `seeded-config`, `injected-code`,
-  `file-change`, `runtime-install`, `host-command` and `sandbox-off`;
-  `scripts/audit-descriptor.mjs` fails a manifest that does one of these
-  without declaring it. A wrapper that only sets environment variables or
-  flags declares nothing.
+- `packaging` declares what the package changes around the vendor's build;
+  the kinds and levels are in [permissions](permissions.md#declaring-changes-to-how-the-app-runs).
 
 ### The manifest
 
@@ -172,7 +168,7 @@ modules:
   or the ref grows instead of shrinking.
 - **`finish-args`** are the smallest set that lets the core feature work, with
   a comment on each group. Optional extras are documented as `flatpak override`
-  commands in the metainfo, not granted.
+  commands in the metainfo, not granted; see [permissions](permissions.md).
 
 ### `apply_extra.sh`
 

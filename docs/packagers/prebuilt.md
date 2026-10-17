@@ -1,6 +1,6 @@
 ---
 description: Shared support libraries built once in flatpark/prebuilt — what exists, when to use one, and how to add one.
-order: 3
+order: 4
 ---
 
 # Prebuilt stacks
