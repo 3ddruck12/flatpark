@@ -1,6 +1,6 @@
 ---
 description: The full process an agent follows on every packaging run, from candidate to listed app.
-order: 7
+order: 8
 ---
 
 # Packaging playbook
@@ -154,8 +154,8 @@ On top of that:
   the sandbox reports nothing "not found".
 - The app's data lands under `~/.var/app/<id>/` or a granted directory, and
   survives a restart.
-- `flatpak kill <id>` after every run; clean up the test install and
-  `~/.var/app/<id>` when done.
+- `flatpak kill <id>` after every run. When the work is merged or dropped,
+  clean up as in [cleaning up after a run](cleanup.md).
 - Note what you couldn't verify (a real session's rendering, login flows,
   hardware). Coverage is always partial; say so.
 

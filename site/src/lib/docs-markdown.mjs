@@ -6,7 +6,7 @@
 //   - anything else in the repo (registry/, scripts/, docs/internal/, docs/specs/)
 //     -> the file on GitHub;
 //   - a target that doesn't exist -> the build fails (docsLinkCheck).
-// Root-relative site links (`/setup/`) get the locale prefix in a translation.
+// Root-relative site links (`/apps/`) get the locale prefix in a translation.
 //
 // A `## For agents` heading starts the part of a page written for agents and
 // for readers who want everything; it is folded into a <details> block.

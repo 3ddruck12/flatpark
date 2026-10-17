@@ -28,7 +28,7 @@ export function getLangFromUrl(url: URL): Lang {
 
 /**
  * Turn a default-locale path into the `lang` equivalent. Paths are written
- * throughout the site in their English form (`/setup/`), and every link goes
+ * throughout the site in their English form (`/apps/`), and every link goes
  * through here so a page never has to know which locale it is rendering as.
  */
 export function localizePath(path: string, lang: Lang): string {

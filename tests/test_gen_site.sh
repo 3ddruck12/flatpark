@@ -105,7 +105,6 @@ fi
 
 index="$site_out/index.html"
 detail="$site_out/apps/io.flatpark.TestOne/index.html"
-setup="$site_out/setup/index.html"
 
 assert_file "$index"
 assert_contains "$index" "FlatPark"
@@ -131,7 +130,7 @@ assert_contains "$index" "Finance"
 assert_contains "$index" "/apps/io.flatpark.TestOne/"
 
 # Detail page: Flathub-style Install button (flatpakref) + setup link, real
-# permissions/description. The manual command block now lives on /setup/.
+# permissions/description. The manual commands live in docs/users/setup.md.
 assert_file "$detail"
 assert_contains "$detail" "Test One"
 # A </script> in descriptor text must not end the JSON-LD block (PR #473 review).
@@ -152,7 +151,7 @@ assert_contains "$detail" "A test application for FlatPark."
 # description <ul> list items render as <li> in the About section
 assert_contains "$detail" "<li>Bullet feature one</li>"
 assert_contains "$detail" "io.flatpark.TestOne.flatpakref"
-assert_contains "$detail" "/setup/"
+assert_contains "$detail" "/docs/users/setup/"
 # Category chip links into the browse page with that section preselected, and
 # the back link lands on the browse page rather than the home grid.
 assert_contains "$detail" "/apps/?section=utilities"
@@ -160,9 +159,10 @@ assert_contains "$detail" "/apps/?section=utilities"
 assert_contains "$detail" "chip chip-link"
 assert_contains "$detail" '<a href="/apps/" class="hover:text-ink">'
 
-# Setup page carries the remote-add command.
-assert_file "$setup"
-assert_contains "$setup" "flatpak --user remote-add --if-not-exists flatpark https://dl.flatpark.org/flatpark.flatpakrepo"
+# Setup is a docs page and carries the remote-add command.
+assert_file "$site_out/docs/users/setup/index.html"
+assert_contains "$site_out/docs/users/setup/index.html" "https://dl.flatpark.org/flatpark.flatpakrepo"
+assert_contains "$index" "/docs/users/setup/"
 
 # Docs library: the repo's docs/ rendered under /docs/, plus the global footer.
 docs="$site_out/docs"
@@ -184,10 +184,10 @@ assert_contains "$index" "/docs/project/policies/"
 assert_contains "$index" "/docs/project/trust/"
 assert_file "$docs/packagers/submitting/index.html"
 assert_contains "$docs/packagers/submitting/index.html" "flatpark.yml"
-assert_file "$docs/users/guide/index.html"
-assert_contains "$docs/users/guide/index.html" "remote-add"
+assert_file "$docs/users/cleanup/index.html"
+assert_contains "$docs/users/cleanup/index.html" "--delete-data"
 assert_contains "$index" "/docs/packagers/submitting/"
-assert_contains "$index" "/docs/users/guide/"
+assert_contains "$index" "/docs/users/troubleshooting/"
 assert_file "$docs/project/conduct/index.html"
 assert_contains "$docs/project/conduct/index.html" "Code of conduct"
 assert_contains "$index" "/docs/project/conduct/"
@@ -202,12 +202,13 @@ assert_contains "$docs/packagers/playbook/index.html" "github.com/flatpark/flatp
 assert_contains "$docs/packagers/index.html" "docs-cards"
 for d in internal specs; do [ ! -e "$docs/$d" ] || { echo "FAIL: docs/$d was published"; exit 1; }; done
 # A translation replaces its page under the locale, with localised links.
-assert_contains "$site_out/zh-Hans/docs/users/guide/index.html" "用户指南"
-assert_contains "$site_out/zh-Hans/docs/users/guide/index.html" 'href="/zh-Hans/docs/project/trust/"'
+assert_contains "$site_out/zh-Hans/docs/users/setup/index.html" "配置 FlatPark"
+assert_contains "$site_out/zh-Hans/docs/users/setup/index.html" 'href="/zh-Hans/docs/project/trust/"'
 # Markdown sources for agents, and the old content-page URLs redirect.
-assert_file "$docs/users/guide.md"
-assert_contains "$site_out/llms-full.txt" "# User guide"
-assert_contains "$site_out/llms.txt" "/docs/users/guide.md"
+assert_file "$docs/users/setup.md"
+assert_contains "$site_out/llms-full.txt" "# Setting up FlatPark"
+assert_contains "$site_out/llms.txt" "/docs/users/setup.md"
+assert_contains "$site_out/_redirects" "/setup/ /docs/users/setup/ 301"
 assert_contains "$site_out/_redirects" "/trust/ /docs/project/trust/ 301"
 
 # Header type-ahead: the dropdown ships on every page (including app pages,

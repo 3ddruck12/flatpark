@@ -1,7 +1,7 @@
 // Locale-aware access to the docs library (the `docs` content collection).
 //
 // English is the source. A translation sits next to its page
-// (`users/guide.zh-Hans.md`) and replaces it under that locale; an untranslated
+// (`users/setup.zh-Hans.md`) and replaces it under that locale; an untranslated
 // page renders its English body under the localised URL, so the sidebar, the
 // hreflang set and the sitemap are the same in every locale.
 import { getCollection, type CollectionEntry } from 'astro:content';
@@ -11,9 +11,9 @@ import { docSlug, docUrl, splitDocId } from './docs-paths.mjs';
 type Entry = CollectionEntry<'docs'>;
 
 export interface Doc {
-  /** English id: `users/guide`, `users/README`, `README`. */
+  /** English id: `users/setup`, `users/README`, `README`. */
   base: string;
-  /** Path under /docs/: `users/guide`, `users`, ''. */
+  /** Path under /docs/: `users/setup`, `users`, ''. */
   slug: string;
   /** Top-level directory, '' for the library index. */
   section: string;
