@@ -12,7 +12,9 @@ set -eu
 # sandbox.
 
 # WebKitGTK's DMABUF renderer paints a blank window under many drivers inside
-# the Flatpak sandbox; the compositing path is the reliable default here.
-export WEBKIT_DISABLE_DMABUF_RENDERER=1
+# the Flatpak sandbox; the compositing path is the reliable default here. A
+# value the user set (flatpak override --env=WEBKIT_DISABLE_DMABUF_RENDERER=0)
+# is kept, as AeroFTP's own startup does since axpdev-lab/aeroftp#1258.
+export WEBKIT_DISABLE_DMABUF_RENDERER="${WEBKIT_DISABLE_DMABUF_RENDERER-1}"
 
 exec /app/extra/aeroftp/bin/aeroftp "$@"
