@@ -1,0 +1,74 @@
+id: org.tunaos.blueshell
+# The vendor's prebuilt /app tree, as Blueshell's own Flatpak CI exports it:
+# Ghostty's rendering engine with the Ptyxis terminal interface, plus the
+# bundled ptyxis-agent the container picker talks to. No X11 path is needed
+# beyond fallback: Ghostty is Wayland-native.
+runtime: org.gnome.Platform
+runtime-version: "51"
+sdk: org.gnome.Sdk
+command: blueshell
+separate-locales: false
+build-options:
+  no-debuginfo: true
+finish-args:
+  # Wayland-native GTK 4 / libadwaita app. fallback-x11 (with ipc) only for
+  # X11 sessions.
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --share=ipc
+  - --device=dri
+  # A terminal's job is running shells, and shells live on the host: every
+  # new window, tab and pane spawns the user's login shell, and the
+  # containers picker enters Toolbox, Distrobox and Podman containers.
+  # Flatpak cannot do either inside the sandbox, so Blueshell escapes
+  # through `flatpak-spawn --host`. This is the sandbox escape FlatPark
+  # rejects by default; it is declared under policy.dangerous_permissions
+  # in flatpark.yml.
+  - --talk-name=org.freedesktop.Flatpak
+  # Read the host's ~/.config/ghostty (config, themes) and any config-file
+  # includes in $HOME, the same file the user edits for any Ghostty. Written
+  # never: the sandbox-local config overrides it.
+  - --filesystem=home:ro
+  # The containers picker lists and enters Podman containers over the
+  # user's Podman socket.
+  - --filesystem=xdg-run/podman
+modules:
+  - name: blueshell
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 apply_extra.sh /app/bin/apply_extra
+      - install -Dm755 blueshell-wrapper /app/bin/blueshell
+      - install -Dm644 org.tunaos.blueshell.desktop /app/share/applications/org.tunaos.blueshell.desktop
+      - install -Dm644 org.tunaos.blueshell.metainfo.xml /app/share/metainfo/org.tunaos.blueshell.metainfo.xml
+      - install -Dm644 org.tunaos.blueshell.svg /app/share/icons/hicolor/scalable/apps/org.tunaos.blueshell.svg
+      # Ghostty passes these paths to host shells; relative links work both
+      # inside /app and under the installed app's host-side files directory.
+      - ln -s ../extra/blueshell/share/ghostty /app/share/ghostty
+      - ln -s ../extra/blueshell/share/terminfo /app/share/terminfo
+    sources:
+      # BEGIN MANAGED EXTRA-DATA
+      - type: extra-data
+        filename: blueshell.tar.gz
+        only-arches:
+          - x86_64
+        url: https://github.com/tuna-os/blueshell/releases/download/v1.3.1/blueshell-x86_64.tar.gz
+        sha256: bc2ce22b53486a619a95e07546ff51e6d2e1f59de3c8a95be269ef067867120d
+        size: 20930820
+      - type: extra-data
+        filename: blueshell.tar.gz
+        only-arches:
+          - aarch64
+        url: https://github.com/tuna-os/blueshell/releases/download/v1.3.1/blueshell-aarch64.tar.gz
+        sha256: 08687513d29f820639ac279c8c21f7b354c060071236994d18c219dbd0debf78
+        size: 20525111
+      # END MANAGED EXTRA-DATA
+      - type: file
+        path: apply_extra.sh
+      - type: file
+        path: blueshell-wrapper
+      - type: file
+        path: org.tunaos.blueshell.desktop
+      - type: file
+        path: org.tunaos.blueshell.metainfo.xml
+      - type: file
+        path: org.tunaos.blueshell.svg
