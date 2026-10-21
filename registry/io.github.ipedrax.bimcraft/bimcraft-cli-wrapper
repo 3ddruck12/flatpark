@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+
+# Headless command runner and stdio MCP server, reachable as
+#   flatpak run --command=bimcraft-cli io.github.ipedrax.bimcraft ...
+exec /app/extra/bimcraft/bin/bimcraft-cli "$@"

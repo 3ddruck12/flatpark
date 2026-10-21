@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.ipedrax.bimcraft</id>
+  <name>BIMCraft</name>
+  <summary>Model buildings and draw them</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT OR Apache-2.0</project_license>
+  <developer id="io.github.ipedrax">
+    <name>IPedrax</name>
+  </developer>
+  <url type="homepage">https://github.com/IPedrax/BIMCraft</url>
+  <url type="bugtracker">https://github.com/IPedrax/BIMCraft/issues</url>
+  <url type="vcs-browser">https://github.com/IPedrax/BIMCraft</url>
+  <description>
+    <p>This is a community package of BIMCraft, maintained independently. It repackages the official upstream Linux tarball unmodified.</p>
+    <p>BIMCraft is an open-source building information modeling application. Draw walls, floors, roofs, ceilings, stairs, doors and windows on levels. Plans, sections, elevations and the 3D view are drawn from that one model, and rooms, schedules and sheets follow it.</p>
+    <p>It saves its own projects, opens and saves IFC, and exports PNG, SVG and PDF. The command line and an MCP server on standard input can drive the same commands.</p>
+    <p>The headless runner is <code>flatpak run --command=bimcraft-cli io.github.ipedrax.bimcraft --help</code>.</p>
+    <p>Permissions follow upstream's own Flatpak manifest: Wayland, with X11 as a fallback, the GPU, and the Documents folder. Files anywhere else go through the file chooser. No network access is granted.</p>
+    <p>To open a project by path outside Documents, run <code>flatpak override --user --filesystem=home io.github.ipedrax.bimcraft</code>. Remove that grant with <code>flatpak override --user --reset io.github.ipedrax.bimcraft</code>.</p>
+  </description>
+  <launchable type="desktop-id">io.github.ipedrax.bimcraft.desktop</launchable>
+  <categories>
+    <category>Graphics</category>
+    <category>Engineering</category>
+  </categories>
+  <keywords>
+    <keyword>BIM</keyword>
+    <keyword>IFC</keyword>
+    <keyword>architecture</keyword>
+    <keyword>building</keyword>
+  </keywords>
+  <screenshots>
+    <screenshot type="default">
+      <caption>The sample house: its plan with dimensions, door and window tags and a section</caption>
+      <image>https://raw.githubusercontent.com/IPedrax/BIMCraft/main/docs/images/desktop.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>The sample house in 3D</caption>
+      <image>https://raw.githubusercontent.com/IPedrax/BIMCraft/main/docs/images/sample-3d.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>A section through the sample house</caption>
+      <image>https://raw.githubusercontent.com/IPedrax/BIMCraft/main/docs/images/sample-section.png</image>
+    </screenshot>
+  </screenshots>
+  <content_rating type="oars-1.1"/>
+  <recommends>
+    <control>keyboard</control>
+    <control>pointing</control>
+  </recommends>
+  <provides>
+    <binary>bimcraft</binary>
+    <binary>bimcraft-cli</binary>
+    <mediatype>application/x-bimcraft</mediatype>
+    <mediatype>application/x-ifc</mediatype>
+  </provides>
+  <releases>
+    <release version="0.6.0" date="2026-10-20"/>
+  </releases>
+</component>

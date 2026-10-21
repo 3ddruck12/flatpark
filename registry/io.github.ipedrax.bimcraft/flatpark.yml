@@ -1,0 +1,23 @@
+id: io.github.ipedrax.bimcraft
+name: BIMCraft
+summary: Model buildings and draw them
+website: https://github.com/IPedrax/BIMCraft
+source_url: https://github.com/IPedrax/BIMCraft
+build:
+  manifest: io.github.ipedrax.bimcraft.yml
+  branch: stable
+  mode: extra-data
+  arches: [x86_64]
+catalog:
+  category: Graphics
+  upstream_approved: false
+  tags:
+    - BIM
+    - IFC
+    - Architecture
+    - CAD
+update:
+  command: ./resolve-update.sh
+policy:
+  proprietary: false
+  dangerous_permissions: []
