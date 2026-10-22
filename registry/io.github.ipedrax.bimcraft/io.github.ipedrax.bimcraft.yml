@@ -1,0 +1,64 @@
+id: io.github.ipedrax.bimcraft
+runtime: org.freedesktop.Platform
+runtime-version: "26.08"
+sdk: org.freedesktop.Sdk
+command: bimcraft
+separate-locales: false
+build-options:
+  no-debuginfo: true
+# The app id and finish-args follow upstream's own Flatpak manifest
+# (packaging/linux/flatpak/io.github.ipedrax.bimcraft.bundle.yml), so this
+# package and the single-file bundle upstream attaches to each release are
+# the same application. That bundle is built from this same tarball.
+# x86_64 only. The binaries need only glibc from the runtime; Wayland, X11,
+# xkbcommon and EGL are loaded at run time.
+finish-args:
+  # Native Rust/egui app. Upstream's manifest grants these and nothing else.
+  - --socket=wayland
+  - --socket=fallback-x11
+  # X11 shared memory (MIT-SHM) for the X11 fallback.
+  - --share=ipc
+  # GPU access for the 3D view.
+  - --device=dri
+  # Open and Save go through the file-chooser portal. Documents is granted so
+  # a project passed by path keeps working.
+  - --filesystem=xdg-documents
+  # Deliberately not granted:
+  #   --share=network       -> upstream withholds it. MCP is a stdio server,
+  #                            not a socket.
+  #   --filesystem=home     -> the metainfo documents the override
+modules:
+  - name: bimcraft
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 apply_extra.sh /app/bin/apply_extra
+      - install -Dm755 bimcraft-wrapper /app/bin/bimcraft
+      - install -Dm755 bimcraft-cli-wrapper /app/bin/bimcraft-cli
+      - install -Dm644 io.github.ipedrax.bimcraft.desktop /app/share/applications/io.github.ipedrax.bimcraft.desktop
+      - install -Dm644 io.github.ipedrax.bimcraft.metainfo.xml /app/share/metainfo/io.github.ipedrax.bimcraft.metainfo.xml
+      - install -Dm644 io.github.ipedrax.bimcraft.mime.xml /app/share/mime/packages/io.github.ipedrax.bimcraft.xml
+      - install -Dm644 io.github.ipedrax.bimcraft.svg /app/share/icons/hicolor/scalable/apps/io.github.ipedrax.bimcraft.svg
+    sources:
+      # BEGIN MANAGED EXTRA-DATA
+      - type: extra-data
+        filename: bimcraft.tar.gz
+        only-arches:
+          - x86_64
+        url: https://github.com/IPedrax/BIMCraft/releases/download/v0.6.0/bimcraft-0.6.0-linux-x86_64.tar.gz
+        sha256: 5058e32121274342e808b62c97cfd9f246fed2dcc3ae3a67350a84044b0d91a7
+        size: 15871009
+      # END MANAGED EXTRA-DATA
+      - type: file
+        path: apply_extra.sh
+      - type: file
+        path: bimcraft-wrapper
+      - type: file
+        path: bimcraft-cli-wrapper
+      - type: file
+        path: io.github.ipedrax.bimcraft.desktop
+      - type: file
+        path: io.github.ipedrax.bimcraft.metainfo.xml
+      - type: file
+        path: io.github.ipedrax.bimcraft.mime.xml
+      - type: file
+        path: io.github.ipedrax.bimcraft.svg
