@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=OpenWork
+Comment=Desktop app where AI agents work on your files
+Exec=openwork %U
+Icon=com.differentai.openwork
+Terminal=false
+Categories=Development;
+StartupWMClass=com.differentai.openwork
+MimeType=x-scheme-handler/openwork;
+Keywords=ai;agent;coding;mcp;opencode;

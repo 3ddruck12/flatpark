@@ -1,0 +1,65 @@
+id: com.differentai.openwork
+runtime: org.freedesktop.Platform
+runtime-version: "26.08"
+sdk: org.freedesktop.Sdk
+# Electron app: the Electron base app ships zypak, which redirects Chromium's
+# SUID sandbox onto the Flatpak sandbox. The wrapper runs the binary through
+# zypak-wrapper, so the app keeps an internal sandbox.
+base: org.electronjs.Electron2.BaseApp
+base-version: "26.08"
+command: openwork
+separate-locales: false
+build-options:
+  no-debuginfo: true
+finish-args:
+  # Electron (Chromium). The build bundles Chromium and its own ffmpeg, ANGLE
+  # and Vulkan. GTK3, NSS, CUPS, ATK, ALSA, dbus, gbm and X11 come from
+  # org.freedesktop.Platform 26.08.
+  - --share=ipc
+  # Model providers, optional sign-in, and MCP servers. Local models on
+  # another machine are reached the same way.
+  - --share=network
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+  # Chromium audio. The microphone still goes through the portal.
+  - --socket=pulseaudio
+  # Desktop notifications for finished agent runs.
+  - --talk-name=org.freedesktop.Notifications
+  # Encrypt stored provider credentials through the Secret Service.
+  - --talk-name=org.freedesktop.secrets
+  # A leaked ELECTRON_RUN_AS_NODE would start the binary as plain Node.
+  # zypak's child processes do not see an unset in the wrapper.
+  - --unset-env=ELECTRON_RUN_AS_NODE
+  # No filesystem grant. Settings live in the XDG dirs Flatpak redirects into
+  # the per-app data directory. Working on a real project is an opt-in; the
+  # metainfo has the override.
+modules:
+  - name: openwork
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 apply_extra.sh /app/bin/apply_extra
+      - install -Dm755 openwork-wrapper /app/bin/openwork
+      - install -Dm644 com.differentai.openwork.desktop /app/share/applications/com.differentai.openwork.desktop
+      - install -Dm644 com.differentai.openwork.metainfo.xml /app/share/metainfo/com.differentai.openwork.metainfo.xml
+      - install -Dm644 com.differentai.openwork.png /app/share/icons/hicolor/512x512/apps/com.differentai.openwork.png
+    sources:
+      # BEGIN MANAGED EXTRA-DATA
+      - type: extra-data
+        filename: openwork.tar.gz
+        only-arches:
+          - x86_64
+        url: https://github.com/different-ai/openwork/releases/download/v0.18.62/openwork-linux-x64-0.18.62.tar.gz
+        sha256: 05f3f2a0a1a1aeb2afe950a665f66b40edc34a5996aab4d804db4872ef657966
+        size: 335646078
+      # END MANAGED EXTRA-DATA
+      - type: file
+        path: apply_extra.sh
+      - type: file
+        path: openwork-wrapper
+      - type: file
+        path: com.differentai.openwork.desktop
+      - type: file
+        path: com.differentai.openwork.metainfo.xml
+      - type: file
+        path: com.differentai.openwork.png

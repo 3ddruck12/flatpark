@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.differentai.openwork</id>
+  <name>OpenWork</name>
+  <summary>Desktop app where AI agents work on your files</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <developer id="com.differentai">
+    <name>Different AI</name>
+  </developer>
+  <url type="homepage">https://openworklabs.com</url>
+  <url type="help">https://openworklabs.com/docs</url>
+  <url type="bugtracker">https://github.com/different-ai/openwork/issues</url>
+  <url type="vcs-browser">https://github.com/different-ai/openwork</url>
+  <description>
+    <p>This is a community package of OpenWork, maintained independently and unaffiliated with Different AI. It repackages the official upstream Linux build unmodified.</p>
+    <p>OpenWork is a desktop app where AI agents do work on your own files. It is built on OpenCode and talks to hosted providers, your own API keys, or a local model server. No OpenWork account is required to use it locally.</p>
+    <p>Sandbox: display, GPU, network, audio, notifications and the Secret Service for stored credentials. There is no filesystem grant. Settings stay in the app's own data directory, and picking a file goes through the desktop portal. To let an agent work in a directory of yours:</p>
+    <p>Grant a project directory with <code>flatpak override --user --filesystem=~/Projects com.differentai.openwork</code>.</p>
+  </description>
+  <content_rating type="oars-1.1"/>
+  <categories>
+    <category>Development</category>
+  </categories>
+  <keywords>
+    <keyword>ai</keyword>
+    <keyword>agent</keyword>
+    <keyword>coding</keyword>
+    <keyword>mcp</keyword>
+    <keyword>opencode</keyword>
+  </keywords>
+  <recommends>
+    <display_length compare="ge">800</display_length>
+    <control>keyboard</control>
+    <control>pointing</control>
+  </recommends>
+  <provides>
+    <binary>openwork</binary>
+  </provides>
+  <launchable type="desktop-id">com.differentai.openwork.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <caption>The composer with the model picker open</caption>
+      <image>https://raw.githubusercontent.com/different-ai/openwork/v0.18.62/docs/images/model-picker.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Settings</caption>
+      <image>https://raw.githubusercontent.com/different-ai/openwork/v0.18.62/docs/images/opencode-engine/settings.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Command palette</caption>
+      <image>https://raw.githubusercontent.com/different-ai/openwork/v0.18.62/docs/images/opencode-engine/palette.png</image>
+    </screenshot>
+  </screenshots>
+  <releases>
+    <release version="0.18.62" date="2026-10-23">
+      <description>
+        <p>OpenWork 0.18.62.</p>
+      </description>
+    </release>
+  </releases>
+</component>
