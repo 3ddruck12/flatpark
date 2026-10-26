@@ -15,8 +15,8 @@
   <description>
     <p>This is a community package of OpenWork, maintained independently and unaffiliated with Different AI. It repackages the official upstream Linux build unmodified.</p>
     <p>OpenWork is a desktop app where AI agents do work on your own files. It is built on OpenCode and talks to hosted providers, your own API keys, or a local model server. No OpenWork account is required to use it locally.</p>
-    <p>Sandbox: display, GPU, network, audio, notifications and the Secret Service for stored credentials. There is no filesystem grant. Settings stay in the app's own data directory, and picking a file goes through the desktop portal. To let an agent work in a directory of yours:</p>
-    <p>Grant a project directory with <code>flatpak override --user --filesystem=~/Projects com.differentai.openwork</code>.</p>
+    <p>Sandbox: display, GPU, network, audio, notifications and the Secret Service for stored credentials. The only folder it can reach is its default workspace, ~/OpenWork Chat. Settings stay in the app's own data directory, and picking a file goes through the desktop portal. To let an agent work in another directory, grant it with <code>flatpak override --user --filesystem=~/Projects com.differentai.openwork</code>.</p>
+    <p>Commands the agent runs see only what the Flatpak runtime ships, not the tools installed on your system. bash, python3 and curl are there; git, node and other host tools are not, so agent tasks that call them fail. This is a known Flatpak limitation.</p>
   </description>
   <content_rating type="oars-1.1"/>
   <categories>

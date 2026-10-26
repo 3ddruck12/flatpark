@@ -31,9 +31,13 @@ finish-args:
   # A leaked ELECTRON_RUN_AS_NODE would start the binary as plain Node.
   # zypak's child processes do not see an unset in the wrapper.
   - --unset-env=ELECTRON_RUN_AS_NODE
-  # No filesystem grant. Settings live in the XDG dirs Flatpak redirects into
-  # the per-app data directory. Working on a real project is an opt-in; the
-  # metainfo has the override.
+  # The default workspace is path.join(os.homedir(), "OpenWork Chat"),
+  # hard-coded upstream. Without this grant it sits on the sandbox tmpfs and
+  # every file the agent writes there is gone on exit. Settings and session
+  # history live in the XDG dirs Flatpak redirects into the per-app data
+  # directory. Any other project directory is an opt-in; the metainfo has the
+  # override.
+  - --filesystem=~/OpenWork Chat:create
 modules:
   - name: openwork
     buildsystem: simple
