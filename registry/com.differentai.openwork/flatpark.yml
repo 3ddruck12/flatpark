@@ -1,0 +1,24 @@
+id: com.differentai.openwork
+name: OpenWork
+summary: Desktop app where AI agents work on your files
+website: https://openworklabs.com
+source_url: https://github.com/different-ai/openwork
+build:
+  manifest: com.differentai.openwork.yml
+  branch: stable
+  mode: extra-data
+  arches: [x86_64]
+catalog:
+  category: AI
+  upstream_approved: false
+  tags:
+    - AI
+    - Agents
+    - MCP
+    - Coding
+    - Electron
+update:
+  command: ./resolve-update.sh
+policy:
+  proprietary: false
+  dangerous_permissions: []

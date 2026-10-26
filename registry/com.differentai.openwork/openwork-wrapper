@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+
+# OpenWork is the Electron binary staged by apply_extra at
+# /app/extra/openwork/openwork. zypak-wrapper, from the Electron base app,
+# redirects Chromium's SUID sandbox onto the Flatpak sandbox.
+# --ozone-platform-hint=auto uses Wayland when it is there and X11 otherwise.
+#
+# Clear ELECTRON_RUN_AS_NODE for this process. The finish-arg does the same
+# for zypak's children, which do not see this unset.
+
+unset ELECTRON_RUN_AS_NODE
+exec zypak-wrapper /app/extra/openwork/openwork --ozone-platform-hint=auto "$@"
