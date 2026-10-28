@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=scrcpy
+Comment=Display and control your Android device
+Exec=scrcpy
+Icon=com.genymobile.scrcpy
+Terminal=false
+StartupWMClass=com.genymobile.scrcpy
+Categories=Utility;RemoteAccess;Network;
+Keywords=Android;screen;mirror;USB;ADB;
