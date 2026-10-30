@@ -1,0 +1,58 @@
+id: io.github.francisreboucas.constructcad
+runtime: org.freedesktop.Platform
+runtime-version: "26.08"
+sdk: org.freedesktop.Sdk
+command: constructcad
+separate-locales: false
+build-options:
+  no-debuginfo: true
+# Native Rust/egui/wgpu build. The binaries need only glibc from the runtime.
+# Wayland, X11, xkbcommon, EGL, Vulkan and dbus are loaded at run time; the
+# 26.08 platform ships them. The binary sets its window class to constructcad.
+finish-args:
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  # 3D view (wgpu: Vulkan, with EGL as a fallback).
+  - --device=dri
+  # Once a day the app asks the GitHub API whether a newer release exists.
+  # It never downloads the update. Links open in the browser through the portal.
+  - --share=network
+  # Open and Save go through the file-chooser portal. Documents is granted so
+  # a project passed by path keeps working.
+  - --filesystem=xdg-documents
+modules:
+  - name: constructcad
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 apply_extra.sh /app/bin/apply_extra
+      - install -Dm755 constructcad-wrapper /app/bin/constructcad
+      - install -Dm755 ccad-wrapper /app/bin/ccad
+      - install -Dm644 io.github.francisreboucas.constructcad.desktop /app/share/applications/io.github.francisreboucas.constructcad.desktop
+      - install -Dm644 io.github.francisreboucas.constructcad.metainfo.xml /app/share/metainfo/io.github.francisreboucas.constructcad.metainfo.xml
+      - install -Dm644 io.github.francisreboucas.constructcad.mime.xml /app/share/mime/packages/io.github.francisreboucas.constructcad.xml
+      - install -Dm644 io.github.francisreboucas.constructcad.png /app/share/icons/hicolor/512x512/apps/io.github.francisreboucas.constructcad.png
+    sources:
+      # BEGIN MANAGED EXTRA-DATA
+      - type: extra-data
+        filename: constructcad.tar.gz
+        only-arches:
+          - x86_64
+        url: https://github.com/francisreboucas/constructcad/releases/download/v0.7.0/constructcad-v0.7.0-x86_64-unknown-linux-gnu.tar.gz
+        sha256: 6d206abc762c0f398a272eb6775e8fbe38175abcf431bafdf72ac2743f402553
+        size: 23659258
+      # END MANAGED EXTRA-DATA
+      - type: file
+        path: apply_extra.sh
+      - type: file
+        path: constructcad-wrapper
+      - type: file
+        path: ccad-wrapper
+      - type: file
+        path: io.github.francisreboucas.constructcad.desktop
+      - type: file
+        path: io.github.francisreboucas.constructcad.metainfo.xml
+      - type: file
+        path: io.github.francisreboucas.constructcad.mime.xml
+      - type: file
+        path: io.github.francisreboucas.constructcad.png
