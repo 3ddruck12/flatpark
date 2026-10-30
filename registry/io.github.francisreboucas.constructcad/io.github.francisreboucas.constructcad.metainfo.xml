@@ -16,7 +16,7 @@
     <p>This is a community package of ConstructCAD, maintained independently and unaffiliated with Francis Rebouças. It repackages the official upstream Linux build unmodified.</p>
     <p>ConstructCAD is a building information modeling application. One parametric model is the source of truth: floor plans, sections, elevations, 3D views, legends, schedules and sheets are views of that model. It imports IFC2X3 and IFC4 and exports IFC4.</p>
     <p>The interface is available in English, Portuguese, Spanish, French, German, Italian, Lao, Polish, Ukrainian and Traditional Chinese. No account is required.</p>
-    <p>Sandbox: display, GPU, network for the daily release check, and the Documents folder so a project path keeps working. Open and Save otherwise go through the file chooser. The app does not download updates itself.</p>
+    <p>Sandbox: display, GPU and the Documents folder so a project path keeps working. Open and Save otherwise go through the file chooser. The in-app update notice is turned off; updates come through FlatPark.</p>
     <p>The headless runner is <code>flatpak run --command=ccad io.github.francisreboucas.constructcad -h</code>.</p>
     <p>To open a project by path outside Documents, run <code>flatpak override --user --filesystem=home io.github.francisreboucas.constructcad</code>.</p>
   </description>

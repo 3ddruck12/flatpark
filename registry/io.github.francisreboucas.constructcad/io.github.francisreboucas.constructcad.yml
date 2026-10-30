@@ -15,9 +15,8 @@ finish-args:
   - --socket=fallback-x11
   # 3D view (wgpu: Vulkan, with EGL as a fallback).
   - --device=dri
-  # Once a day the app asks the GitHub API whether a newer release exists.
-  # It never downloads the update. Links open in the browser through the portal.
-  - --share=network
+  # Updates come from FlatPark; turn off the in-app GitHub release notice.
+  - --env=CONSTRUCTCAD_NO_UPDATE_CHECK=1
   # Open and Save go through the file-chooser portal. Documents is granted so
   # a project passed by path keeps working.
   - --filesystem=xdg-documents
